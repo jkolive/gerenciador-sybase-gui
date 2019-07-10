@@ -468,6 +468,21 @@ Author: Jackson de Oliveira
             <property name="y">305</property>
           </packing>
         </child>
+        <child>
+          <object class="GtkButton" id="btn_file">
+            <property name="label" translatable="yes">Incluir</property>
+            <property name="width_request">70</property>
+            <property name="height_request">34</property>
+            <property name="visible">True</property>
+            <property name="can_focus">True</property>
+            <property name="receives_default">True</property>
+            <signal name="clicked" handler="on_btn_file_clicked" swapped="no"/>
+          </object>
+          <packing>
+            <property name="x">533</property>
+            <property name="y">377</property>
+          </packing>
+        </child>
       </object>
     </child>
   </object>

@@ -1,4 +1,5 @@
 import gi
+
 gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk
 
@@ -34,11 +35,36 @@ class Main:
         self.list_store[path][0] = not self.list_store[path][0]
 
 
+def open_file(button):
+    dialog = Gtk.FileChooserDialog("Localize o banco de dados", None, Gtk.FileChooserAction.OPEN,
+                                   (Gtk.STOCK_CANCEL, Gtk.ResponseType.CANCEL, Gtk.STOCK_OPEN, Gtk.ResponseType.OK))
+
+    add_filters(dialog)
+
+    response = dialog.run()
+
+    if response == Gtk.ResponseType.OK:
+        print("Open clicked")
+        # print("File selected: " + dialog.get_filename())
+    elif response == Gtk.ResponseType.CANCEL:
+        print("Cancel clicked")
+
+    dialog.destroy()
+
+
+def add_filters(dialog):
+    filter_file = Gtk.FileFilter()
+    filter_file.set_name("Arquivos *.db")
+    filter_file.add_pattern("*.db")
+    dialog.add_filter(filter_file)
+
+
 Handlers = {
-    "on_btn_fechar_clicked":  Gtk.main_quit,
+    "on_btn_fechar_clicked": Gtk.main_quit,
     "on_window_main_destroy": Gtk.main_quit,
+    "on_btn_file_clicked": open_file
 }
 
-
-Main()
-Gtk.main()
+if __name__ == "__main__":
+    Main()
+    Gtk.main()
