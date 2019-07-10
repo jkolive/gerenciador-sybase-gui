@@ -3,17 +3,42 @@ gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk
 
 
-builder = Gtk.Builder()
-builder.add_from_file("App.glade")
+class Main:
+    def __init__(self):
+        builder = Gtk.Builder()
+        builder.add_from_file('App.glade')
 
-handlers = {
-    "on_btn_fechar_clicked": Gtk.main_quit,
+        self.list_store = builder.get_object('list_store')
+        self.list_store.append([True, " /home/jackson/Dados", "Contabil.db"])
+        self.treeview = builder.get_object('treeView')
+
+        renderer_toggle = Gtk.CellRendererToggle()
+        renderer_toggle.connect("toggled", self.on_cbox_db_toggled)
+
+        column_toggle = Gtk.TreeViewColumn("#", renderer_toggle, active=0)
+        self.treeview.append_column(column_toggle)
+
+        renderer_text = Gtk.CellRendererText()
+        column_text = Gtk.TreeViewColumn("Caminho", renderer_text, text=1)
+        self.treeview.append_column(column_text)
+
+        renderer_text = Gtk.CellRendererText()
+        column_text = Gtk.TreeViewColumn("Nome", renderer_text, text=2)
+        self.treeview.append_column(column_text)
+
+        builder.connect_signals(Handlers)
+        window = builder.get_object("window_main")
+        window.show_all()
+
+    def on_cbox_db_toggled(self, widget, path):
+        self.list_store[path][0] = not self.list_store[path][0]
+
+
+Handlers = {
+    "on_btn_fechar_clicked":  Gtk.main_quit,
     "on_window_main_destroy": Gtk.main_quit,
-
 }
 
-builder.connect_signals(handlers)
-window = builder.get_object("window_main")
-window.show_all()
 
+Main()
 Gtk.main()
