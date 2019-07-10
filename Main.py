@@ -8,8 +8,10 @@ builder.add_from_file("App.glade")
 
 handlers = {
     "on_btn_fechar_clicked": Gtk.main_quit,
+    "on_window_main_destroy": Gtk.main_quit,
 
 }
+
 builder.connect_signals(handlers)
 window = builder.get_object("window_main")
 window.show_all()
