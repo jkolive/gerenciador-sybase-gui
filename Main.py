@@ -1,3 +1,4 @@
+import os
 import gi
 
 gi.require_version('Gtk', '3.0')
@@ -10,8 +11,11 @@ class Main(Gtk.Window):
         builder = Gtk.Builder()
         builder.add_from_file('App.glade')
 
+        self.name_file = ''
+        self.name_dir = ''
+
         self.list_store = builder.get_object('list_store')
-        self.list_store.append([True, " /home/jackson/Dados", "Contabil.db"])
+        self.list_store.append([False, self.name_dir, self.name_file])
         self.treeview = builder.get_object('treeView')
 
         btn_file = Gtk.Button()
@@ -47,8 +51,14 @@ class Main(Gtk.Window):
         response = dialog.run()
 
         if response == Gtk.ResponseType.OK:
-            print("Open clicked")
-            # print("File selected: " + dialog.get_filename())
+            path = dialog.get_filename()
+            self.name_file = os.path.basename(path)
+            self.name_dir = os.path.dirname(path)
+
+            self.list_store.set_value(self.list_store[0].iter, 0, True)
+            self.list_store.set_value(self.list_store[0].iter, 1, self.name_dir)
+            self.list_store.set_value(self.list_store[0].iter, 2, self.name_file)
+
         elif response == Gtk.ResponseType.CANCEL:
             print("Cancel clicked")
 
@@ -59,6 +69,19 @@ class Main(Gtk.Window):
         filter_file.set_name("Arquivos *.db")
         filter_file.add_pattern("*.db")
         dialog.add_filter(filter_file)
+
+    def on_treeView_row_activated(self, widget):
+        print('OK')
+
+    def on_btn_excluir_clicked(self, button):
+        count = len(self.list_store)
+
+        if count > 1:
+            pass
+        else:
+            self.list_store.set_value(self.list_store[0].iter, 0, False)
+            self.list_store.set_value(self.list_store[0].iter, 1, '')
+            self.list_store.set_value(self.list_store[0].iter, 2, '')
 
     def on_btn_fechar_clicked(self, button):
         Gtk.main_quit()

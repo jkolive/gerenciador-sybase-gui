@@ -414,6 +414,7 @@ Author: Jackson de Oliveira
                 <property name="show_expanders">False</property>
                 <property name="enable_grid_lines">vertical</property>
                 <property name="enable_tree_lines">True</property>
+                <property name="activate_on_single_click">True</property>
                 <child internal-child="selection">
                   <object class="GtkTreeSelection"/>
                 </child>
@@ -474,13 +475,14 @@ Author: Jackson de Oliveira
           </object>
         </child>
         <child>
-          <object class="GtkButton">
+          <object class="GtkButton" id="btn_excluir">
             <property name="label" translatable="yes">Excluir</property>
             <property name="width_request">65</property>
             <property name="height_request">34</property>
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="receives_default">True</property>
+            <signal name="clicked" handler="on_btn_excluir_clicked" swapped="no"/>
           </object>
           <packing>
             <property name="x">607</property>
