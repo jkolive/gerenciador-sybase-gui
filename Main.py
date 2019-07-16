@@ -10,6 +10,7 @@ class Main(Gtk.Window):
         Gtk.Window.__init__(self)
         builder = Gtk.Builder()
         builder.add_from_file('App.glade')
+        self.dialog = builder.get_object('about_dialog')
 
         self.name_file = ''
         self.name_dir = ''
@@ -70,8 +71,11 @@ class Main(Gtk.Window):
         filter_file.add_pattern("*.db")
         dialog.add_filter(filter_file)
 
-    def on_treeView_row_activated(self, widget):
-        print('OK')
+    def on_about_activate(self, button):
+        self.dialog.show()
+
+    def on_about_dialog_response(self, *args):
+        self.dialog.hide()
 
     def on_btn_excluir_clicked(self, button):
         count = len(self.list_store)
@@ -84,10 +88,10 @@ class Main(Gtk.Window):
             self.list_store.set_value(self.list_store[0].iter, 2, '')
 
     def on_btn_fechar_clicked(self, button):
-        Gtk.main_quit()
+        Gtk.main_quit(self)
 
     def on_window_main_destroy(self, widget):
-        Gtk.main_quit()
+        Gtk.main_quit(self)
 
 
 if __name__ == "__main__":
