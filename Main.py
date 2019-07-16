@@ -71,8 +71,8 @@ class Main(Gtk.Window):
         filter_file.add_pattern("*.db")
         dialog.add_filter(filter_file)
 
-    def on_about_activate(self, button):
-        self.dialog.show()
+    def on_about_activate(self, *args):
+        self.dialog.run()
 
     def on_about_dialog_response(self, *args):
         self.dialog.hide()
