@@ -1,4 +1,6 @@
-test/
+__pycache__/
+Exemplos/
 .idea/
 *~
+
 
