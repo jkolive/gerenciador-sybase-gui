@@ -295,6 +295,7 @@ Author: Jackson de Oliveira
                     <property name="margin_bottom">5</property>
                     <property name="max_length">30</property>
                     <property name="input_hints">GTK_INPUT_HINT_LOWERCASE | GTK_INPUT_HINT_NONE</property>
+                    <signal name="changed" handler="on_txt_mem_cache_changed" swapped="no"/>
                   </object>
                   <packing>
                     <property name="x">220</property>

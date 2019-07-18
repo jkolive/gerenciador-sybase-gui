@@ -1,5 +1,6 @@
 import os
 import gi
+import json
 
 gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk
@@ -16,17 +17,32 @@ class Main(Gtk.Window):
         self.name_dir = ''
 
         self.list_store = builder.get_object('list_store')
-        self.list_store.append([False, self.name_dir, self.name_file])
-        self.treeview = builder.get_object('treeView')
-
         self.txt_nome_servidor = builder.get_object('txt_nome_servidor')
         self.txt_nome_servidor.set_placeholder_text('Ex. srvlinux, srvcontabil')
-
         self.txt_mem_cache = builder.get_object('txt_mem_cache')
         self.txt_mem_cache.set_placeholder_text('Informe em MB')
-
         self.txt_param_rede = builder.get_object('txt_param_rede')
+        self.txtbuffer_param_rede = self.txt_param_rede.get_buffer()
         self.txt_param_servidor = builder.get_object('txt_param_servidor')
+        self.txtbuffer_param_servidor = self.txt_param_servidor.get_buffer()
+        self.rbtn_automatico = builder.get_object('rbtn_automatico')
+        self.rbtn_desativado = builder.get_object('rbtn_desativado')
+
+        if os.path.isfile('./data.txt'):
+            with open('data.txt') as json_file:
+                data = json.load(json_file)
+                self.txt_nome_servidor.set_text(data['banco'][0]['nome_servidor'])
+                self.txt_mem_cache.set_text(data['banco'][0]['mem_cache'])
+                self.txtbuffer_param_rede.set_text(data['banco'][0]['param_redes'])
+                self.txtbuffer_param_servidor.set_text(data['banco'][0]['param_servidor'])
+                self.rbtn_automatico.set_active(data['banco'][0]['automatico'])
+                self.rbtn_desativado.set_active(data['banco'][0]['desativado'])
+                self.list_store.append([True, data['banco'][0]['caminho'], data['banco'][0]['nome_arquivo']])
+        else:
+            self.list_store.append([False, self.name_dir, self.name_file])
+
+        self.treeview = builder.get_object('treeView')
+
         self.btn_gravar = builder.get_object('btn_gravar')
         self.btn_incluir = builder.get_object('btn_incluir')
         self.btn_iniciar = builder.get_object('btn_iniciar')
@@ -55,6 +71,10 @@ class Main(Gtk.Window):
         builder.connect_signals(self)
         self.window = builder.get_object("window_main")
         self.window.show_all()
+
+    def on_txt_mem_cache_changed(self, button):
+        if self.txt_mem_cache.get_text().isalpha():
+            self.txt_mem_cache.set_text('')
 
     def on_cbox_db_toggled(self, widget, path):
         self.list_store[path][0] = not self.list_store[path][0]
@@ -99,14 +119,24 @@ class Main(Gtk.Window):
         if count > 1:
             pass
         else:
-            self.list_store.set_value(self.list_store[0].iter, 0, False)
-            self.list_store.set_value(self.list_store[0].iter, 1, '')
-            self.list_store.set_value(self.list_store[0].iter, 2, '')
+            try:
+                os.remove('data.txt')
 
-            self.txt_nome_servidor.set_sensitive(True)
-            self.txt_mem_cache.set_sensitive(True)
-            self.btn_incluir.set_sensitive(True)
-            self.btn_gravar.set_sensitive(True)
+                self.txt_nome_servidor.set_text('')
+                self.txt_mem_cache.set_text('')
+                self.txtbuffer_param_rede.set_text('')
+                self.txtbuffer_param_servidor.set_text('')
+                self.list_store.set_value(self.list_store[0].iter, 0, False)
+                self.list_store.set_value(self.list_store[0].iter, 1, '')
+                self.list_store.set_value(self.list_store[0].iter, 2, '')
+
+                self.txt_nome_servidor.set_sensitive(True)
+                self.txt_mem_cache.set_sensitive(True)
+                self.btn_incluir.set_sensitive(True)
+                self.btn_gravar.set_sensitive(True)
+
+            except Exception as erro:
+                print(f'Banco não encontrado!', erro)
 
     def on_btn_iniciar_clicked(self, button):
         if not self.btn_gravar.get_sensitive():
@@ -136,9 +166,29 @@ class Main(Gtk.Window):
 
             dialog.destroy()
         else:
+            self.save_data()
             self.txt_nome_servidor.set_sensitive(False)
             self.txt_mem_cache.set_sensitive(False)
             self.btn_gravar.set_sensitive(False)
+
+    def save_data(self):
+        data = {'banco': []}
+        data['banco'].append({
+            'nome_servidor': self.txt_nome_servidor.get_text(),
+            'mem_cache': self.txt_mem_cache.get_text(),
+            'param_redes': self.txtbuffer_param_rede.get_text(self.txtbuffer_param_rede.get_start_iter(),
+                                                              self.txtbuffer_param_rede.get_end_iter(),
+                                                              False),
+            'param_servidor': self.txtbuffer_param_servidor.get_text(self.txtbuffer_param_servidor.get_start_iter(),
+                                                                     self.txtbuffer_param_servidor.get_end_iter(),
+                                                                     False),
+            'automatico': self.rbtn_automatico.get_active(),
+            'desativado': self.rbtn_desativado.get_active(),
+            'caminho': self.list_store[self.list_store[0].iter][1],
+            'nome_arquivo': self.list_store[self.list_store[0].iter][2]
+        })
+        with open('data.txt', 'w') as outfile:
+            json.dump(data, outfile)
 
     def on_btn_fechar_clicked(self, button):
         dialog = Gtk.MessageDialog(self, 0, Gtk.MessageType.INFO,
