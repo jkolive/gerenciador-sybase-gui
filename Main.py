@@ -1,7 +1,12 @@
-import os
-import gi
-import json
+#!/usr/bin/env python
 
+import os
+import json
+import time
+import signal
+import subprocess
+from subprocess import *
+import gi
 gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk
 
@@ -68,6 +73,14 @@ class Main(Gtk.Window):
         column_text = Gtk.TreeViewColumn("Nome", renderer_text, text=2)
         self.treeview.append_column(column_text)
 
+        init_cmd = run('pidof -s dbsrv16', shell=True)
+        if init_cmd.returncode == 0:
+            self.txt_nome_servidor.set_sensitive(False)
+            self.txt_mem_cache.set_sensitive(False)
+            self.btn_gravar.set_sensitive(False)
+            self.btn_parar.set_sensitive(True)
+            self.btn_iniciar.set_sensitive(False)
+
         builder.connect_signals(self)
         self.window = builder.get_object("window_main")
         self.window.show_all()
@@ -115,8 +128,10 @@ class Main(Gtk.Window):
 
     def on_btn_excluir_clicked(self, button):
         count = len(self.list_store)
+        if not self.txt_nome_servidor.get_sensitive():
+            print("Necessário parar o banco de dados!")
 
-        if count > 1:
+        elif count > 1:
             pass
         else:
             try:
@@ -139,13 +154,43 @@ class Main(Gtk.Window):
                 print(f'Banco não encontrado!', erro)
 
     def on_btn_iniciar_clicked(self, button):
-        if not self.btn_gravar.get_sensitive():
-            self.btn_parar.set_sensitive(True)
-            self.btn_iniciar.set_sensitive(False)
+        if self.btn_gravar.get_sensitive():
+            print('Necessário gravar as informações')
         else:
-            pass
+            try:
+                self.cmd_iniciar()
+                self.btn_parar.set_sensitive(True)
+                self.btn_iniciar.set_sensitive(False)
+
+            except Exception as erro:
+                print(erro)
+
+    def cmd_iniciar(self):
+        os.environ['SYBHOME'] = "/opt/sybase/SYBSsa16"
+        os.environ['PATH'] = os.environ['PATH'] + ":" + os.environ['SYBHOME'] + "/bin64"
+        os.environ['LD_LIBRARY_PATH'] = os.environ['SYBHOME'] + "/lib64"
+        Popen(['export PATH LD_LIBRARY_PATH'], shell=True, executable='/bin/bash')
+        cmd = f"dbsrv16 -c {self.txt_mem_cache.get_text()}M -n {self.txt_nome_servidor.get_text()} " \
+            f"-ud -o /opt/contabil/dados/log/logservidor.txt /opt/contabil/dados/contabil.db"
+        process = run([cmd], shell=True)
+
+        if process.returncode == 0:
+            print('Banco de dados iniciado com sucesso!')
+
+        elif process.returncode == 21:
+            print('Banco de dados já iniciado!')
+
+        else:
+            print('Não foi possível iniciar o banco de dados')
+
+    def get_pid(self, name):
+        return int(check_output(['pidof', '-s', name]))
 
     def on_btn_parar_clicked(self, buttoon):
+        pid = self.get_pid('dbsrv16')
+        cmd_final = run(f'kill {pid}', shell=True)
+        time.sleep(3)
+        print('Banco parado com sucesso!')
         self.btn_iniciar.set_sensitive(True)
         self.btn_parar.set_sensitive(False)
         self.txt_nome_servidor.set_sensitive(True)
@@ -195,8 +240,9 @@ class Main(Gtk.Window):
                                    Gtk.ButtonsType.OK, "INFORMAÇÃO IMPORTANTE")
         dialog.format_secondary_text("O sistema ficará executando em segundo plano.")
         dialog.run()
-
         dialog.destroy()
+
+        raise SystemExit()
 
     def on_window_main_destroy(self, widget):
         Gtk.main_quit(self)
