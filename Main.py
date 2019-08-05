@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3.6
 
 import os
 import json
@@ -110,7 +110,7 @@ class Main(Gtk.Window):
             self.list_store.set_value(self.list_store[0].iter, 2, self.name_file)
 
         elif response == Gtk.ResponseType.CANCEL:
-            print("Cancel clicked")
+            pass
 
         dialog.destroy()
 
@@ -129,7 +129,15 @@ class Main(Gtk.Window):
     def on_btn_excluir_clicked(self, button):
         count = len(self.list_store)
         if not self.txt_nome_servidor.get_sensitive():
-            print("Necessário parar o banco de dados!")
+            dialog = Gtk.MessageDialog(self, 0, Gtk.MessageType.INFO,
+                                       Gtk.ButtonsType.OK, 'INFORMAÇÃO')
+            dialog.format_secondary_text('Necessário parar o banco de dados!')
+            dialog.set_position(Gtk.WindowPosition.CENTER_ALWAYS)
+            response = dialog.run()
+
+            if response == Gtk.ResponseType.OK:
+                dialog.destroy()
+            return True
 
         elif count > 1:
             pass
@@ -155,7 +163,15 @@ class Main(Gtk.Window):
 
     def on_btn_iniciar_clicked(self, button):
         if self.btn_gravar.get_sensitive():
-            print('Necessário gravar as informações')
+            dialog = Gtk.MessageDialog(self, 0, Gtk.MessageType.INFO,
+                                       Gtk.ButtonsType.OK, 'INFORMAÇÃO')
+            dialog.format_secondary_text('Necessário gravar as informações antes de inicializar o banco!')
+            dialog.set_position(Gtk.WindowPosition.CENTER_ALWAYS)
+            response = dialog.run()
+
+            if response == Gtk.ResponseType.OK:
+                dialog.destroy()
+            return True
         else:
             try:
                 self.cmd_iniciar()
@@ -175,13 +191,37 @@ class Main(Gtk.Window):
         process = run([cmd], shell=True)
 
         if process.returncode == 0:
-            print('Banco de dados iniciado com sucesso!')
+            dialog = Gtk.MessageDialog(self, 0, Gtk.MessageType.INFO,
+                                       Gtk.ButtonsType.OK, 'INFORMAÇÃO')
+            dialog.format_secondary_text('Banco de dados inicializado com sucesso!')
+            dialog.set_position(Gtk.WindowPosition.CENTER_ALWAYS)
+            response = dialog.run()
+
+            if response == Gtk.ResponseType.OK:
+                dialog.destroy()
+            return True
 
         elif process.returncode == 21:
-            print('Banco de dados já iniciado!')
+            dialog = Gtk.MessageDialog(self, 0, Gtk.MessageType.WARNING,
+                                       Gtk.ButtonsType.OK, 'INFORMAÇÃO')
+            dialog.format_secondary_text('Banco de Dados já inicializado!')
+            dialog.set_position(Gtk.WindowPosition.CENTER_ALWAYS)
+            response = dialog.run()
+
+            if response == Gtk.ResponseType.OK:
+                dialog.destroy()
+            return True
 
         else:
-            print('Não foi possível iniciar o banco de dados')
+            dialog = Gtk.MessageDialog(self, 0, Gtk.MessageType.WARNING,
+                                       Gtk.ButtonsType.OK, 'ATENÇÃO')
+            dialog.format_secondary_text('Não foi possível iniciar o Banco de dados!')
+            dialog.set_position(Gtk.WindowPosition.CENTER_ALWAYS)
+            response = dialog.run()
+
+            if response == Gtk.ResponseType.OK:
+                dialog.destroy()
+            return True
 
     def get_pid(self, name):
         return int(check_output(['pidof', '-s', name]))
@@ -190,12 +230,31 @@ class Main(Gtk.Window):
         pid = self.get_pid('dbsrv16')
         cmd_final = run(f'kill {pid}', shell=True)
         time.sleep(3)
-        print('Banco parado com sucesso!')
-        self.btn_iniciar.set_sensitive(True)
-        self.btn_parar.set_sensitive(False)
-        self.txt_nome_servidor.set_sensitive(True)
-        self.txt_mem_cache.set_sensitive(True)
-        self.btn_gravar.set_sensitive(True)
+        if cmd_final.returncode == 0:
+            dialog = Gtk.MessageDialog(self, 0, Gtk.MessageType.INFO,
+                                       Gtk.ButtonsType.OK, 'INFORMAÇÃO')
+            dialog.format_secondary_text('Banco de dados parado com sucesso!')
+            dialog.set_position(Gtk.WindowPosition.CENTER_ALWAYS)
+            response = dialog.run()
+
+            if response == Gtk.ResponseType.OK:
+                dialog.destroy()
+                self.btn_iniciar.set_sensitive(True)
+                self.btn_parar.set_sensitive(False)
+                self.txt_nome_servidor.set_sensitive(True)
+                self.txt_mem_cache.set_sensitive(True)
+                self.btn_gravar.set_sensitive(True)
+            return True
+        else:
+            dialog = Gtk.MessageDialog(self, 0, Gtk.MessageType.WARNING,
+                                       Gtk.ButtonsType.OK, 'ATENÇÃO')
+            dialog.format_secondary_text('Não foi possível parar o banco de dados!')
+            dialog.set_position(Gtk.WindowPosition.CENTER_ALWAYS)
+            response = dialog.run()
+
+            if response == Gtk.ResponseType.OK:
+                dialog.destroy()
+            return True
 
     def on_btn_gravar_clicked(self, button):
         if self.txt_nome_servidor.get_text() == '' \
@@ -204,7 +263,7 @@ class Main(Gtk.Window):
                 or self.list_store[self.list_store[0].iter][2] == '':
 
             dialog = Gtk.MessageDialog(self, 0, Gtk.MessageType.INFO,
-                                       Gtk.ButtonsType.OK, 'INFORMAÇÃO IMPORTANTE')
+                                       Gtk.ButtonsType.OK, 'INFORMAÇÃO')
             dialog.format_secondary_text(
                 'Campos necessários ainda não preenchidos!')
             dialog.run()
@@ -237,15 +296,29 @@ class Main(Gtk.Window):
 
     def on_btn_fechar_clicked(self, button):
         dialog = Gtk.MessageDialog(self, 0, Gtk.MessageType.INFO,
-                                   Gtk.ButtonsType.OK, "INFORMAÇÃO IMPORTANTE")
+                                   Gtk.ButtonsType.OK_CANCEL, "FECHAR APLICATIVO")
         dialog.format_secondary_text("O sistema ficará executando em segundo plano.")
-        dialog.run()
+        dialog.set_position(Gtk.WindowPosition.CENTER_ALWAYS)
+        response = dialog.run()
+
+        if response == Gtk.ResponseType.OK:
+            raise SystemExit()
+        if response == Gtk.ResponseType.CANCEL:
+            pass
         dialog.destroy()
 
-        raise SystemExit()
+    def on_window_main_delete_event(self, *args):
+        dialog = Gtk.MessageDialog(self, 0, Gtk.MessageType.QUESTION,
+                                   Gtk.ButtonsType.YES_NO, 'FINALIZAR APLICATIVO')
+        dialog.format_secondary_text("Deseja realmente finalizar o aplicativo?")
+        dialog.set_position(Gtk.WindowPosition.CENTER_ALWAYS)
+        response = dialog.run()
+        dialog.destroy()
 
-    def on_window_main_destroy(self, widget):
-        Gtk.main_quit(self)
+        if response == Gtk.ResponseType.YES:
+            Gtk.main_quit()
+
+        return True
 
 
 if __name__ == "__main__":

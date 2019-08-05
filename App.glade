@@ -50,7 +50,7 @@ Author: Jackson de Oliveira
     <property name="default_width">687</property>
     <property name="default_height">555</property>
     <property name="decorated">False</property>
-    <signal name="destroy" handler="on_window_main_destroy" swapped="no"/>
+    <signal name="delete-event" handler="on_window_main_delete_event" swapped="no"/>
     <child type="titlebar">
       <placeholder/>
     </child>
