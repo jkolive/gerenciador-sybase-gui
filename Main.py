@@ -33,8 +33,8 @@ class Main(Gtk.Window):
         self.rbtn_automatico = builder.get_object('rbtn_automatico')
         self.rbtn_desativado = builder.get_object('rbtn_desativado')
 
-        if os.path.isfile('./data.txt'):
-            with open('data.txt') as json_file:
+        if os.path.isfile('./data.json'):
+            with open('data.json') as json_file:
                 data = json.load(json_file)
                 self.txt_nome_servidor.set_text(data['banco'][0]['nome_servidor'])
                 self.txt_mem_cache.set_text(data['banco'][0]['mem_cache'])
@@ -143,7 +143,7 @@ class Main(Gtk.Window):
             pass
         else:
             try:
-                os.remove('data.txt')
+                os.remove('data.json')
 
                 self.txt_nome_servidor.set_text('')
                 self.txt_mem_cache.set_text('')
@@ -291,7 +291,7 @@ class Main(Gtk.Window):
             'caminho': self.list_store[self.list_store[0].iter][1],
             'nome_arquivo': self.list_store[self.list_store[0].iter][2]
         })
-        with open('data.txt', 'w') as outfile:
+        with open('data.json', 'w') as outfile:
             json.dump(data, outfile)
 
     def on_btn_fechar_clicked(self, button):
