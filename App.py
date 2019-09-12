@@ -1,4 +1,8 @@
-#!/usr/bin/env python3.6
+#!/usr/bin/env python3
+
+import sys
+if 'linux' not in sys.platform:
+    raise Exception('Somente Linux')
 
 import os
 import json
@@ -35,14 +39,14 @@ class Main(Gtk.Window):
 
         if os.path.isfile('./data.json'):
             with open('data.json') as json_file:
-                data = json.load(json_file)
-                self.txt_nome_servidor.set_text(data['banco'][0]['nome_servidor'])
-                self.txt_mem_cache.set_text(data['banco'][0]['mem_cache'])
-                self.txtbuffer_param_rede.set_text(data['banco'][0]['param_redes'])
-                self.txtbuffer_param_servidor.set_text(data['banco'][0]['param_servidor'])
-                self.rbtn_automatico.set_active(data['banco'][0]['automatico'])
-                self.rbtn_desativado.set_active(data['banco'][0]['desativado'])
-                self.list_store.append([True, data['banco'][0]['caminho'], data['banco'][0]['nome_arquivo']])
+                self.data = json.load(json_file)
+                self.txt_nome_servidor.set_text(self.data['banco'][0]['nome_servidor'])
+                self.txt_mem_cache.set_text(self.data['banco'][0]['mem_cache'])
+                self.txtbuffer_param_rede.set_text(self.data['banco'][0]['param_redes'])
+                self.txtbuffer_param_servidor.set_text(self.data['banco'][0]['param_servidor'])
+                self.rbtn_automatico.set_active(self.data['banco'][0]['automatico'])
+                self.rbtn_desativado.set_active(self.data['banco'][0]['desativado'])
+                self.list_store.append([True, self.data['banco'][0]['caminho'], self.data['banco'][0]['nome_arquivo']])
         else:
             self.list_store.append([False, self.name_dir, self.name_file])
 
@@ -175,19 +179,21 @@ class Main(Gtk.Window):
         else:
             try:
                 self.cmd_iniciar()
-                self.btn_parar.set_sensitive(True)
-                self.btn_iniciar.set_sensitive(False)
 
             except Exception as erro:
                 print(erro)
 
     def cmd_iniciar(self):
+        caminho = self.data['banco'][0]['caminho']
+        nome_arquivo = self.data['banco'][0]['nome_arquivo']
+        run([f"mkdir -p '{caminho}'/log"], shell=True)
+        run([f"touch '{caminho}/log/logservidor.txt'"], shell=True)
         os.environ['SYBHOME'] = "/opt/sybase/SYBSsa16"
         os.environ['PATH'] = os.environ['PATH'] + ":" + os.environ['SYBHOME'] + "/bin64"
         os.environ['LD_LIBRARY_PATH'] = os.environ['SYBHOME'] + "/lib64"
         Popen(['export PATH LD_LIBRARY_PATH'], shell=True, executable='/bin/bash')
         cmd = f"dbsrv16 -c {self.txt_mem_cache.get_text()}M -n {self.txt_nome_servidor.get_text()} " \
-            f"-ud -o /opt/contabil/dados/log/logservidor.txt /opt/contabil/dados/contabil.db"
+            f"-ud -o '{caminho}/log/logservidor.txt' '{caminho}/{nome_arquivo}'"
         process = run([cmd], shell=True)
 
         if process.returncode == 0:
@@ -196,7 +202,8 @@ class Main(Gtk.Window):
             dialog.format_secondary_text('Banco de dados inicializado com sucesso!')
             dialog.set_position(Gtk.WindowPosition.CENTER_ALWAYS)
             response = dialog.run()
-
+            self.btn_parar.set_sensitive(True)
+            self.btn_iniciar.set_sensitive(False)
             if response == Gtk.ResponseType.OK:
                 dialog.destroy()
             return True
