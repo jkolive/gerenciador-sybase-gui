@@ -19,7 +19,7 @@ class Main(Gtk.Window):
     def __init__(self):
         Gtk.Window.__init__(self)
         builder = Gtk.Builder()
-        builder.add_from_file('App.glade')
+        builder.add_from_file('layout/App.glade')
         self.dialog = builder.get_object('about_dialog')
 
         self.name_file = ''

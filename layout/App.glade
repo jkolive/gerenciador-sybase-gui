@@ -391,7 +391,7 @@ Author: Jackson de Oliveira
             <property name="height_request">130</property>
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="pixbuf">images/tux.png</property>
+            <property name="pixbuf">../images/tux.png</property>
           </object>
           <packing>
             <property name="x">564</property>
@@ -544,7 +544,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.</property>
     <property name="authors">Jackson de Oliveira
 Twitter: @jkolive</property>
-    <property name="logo">images/tux.png</property>
+    <property name="logo">../images/tux.png</property>
     <property name="wrap_license">True</property>
     <property name="license_type">custom</property>
     <signal name="response" handler="on_about_dialog_response" swapped="no"/>
