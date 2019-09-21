@@ -6,9 +6,10 @@
     <property name="can_focus">False</property>
     <property name="title" translatable="yes">Solicitação de Senha</property>
     <property name="resizable">False</property>
+    <property name="modal">True</property>
     <property name="window_position">center-always</property>
     <property name="default_width">300</property>
-    <property name="default_height">150</property>
+    <property name="default_height">200</property>
     <signal name="destroy" handler="on_win_askpass_destroy" swapped="no"/>
     <child>
       <placeholder/>
@@ -28,8 +29,8 @@
             <signal name="clicked" handler="on_btn_cancelar_clicked" swapped="no"/>
           </object>
           <packing>
-            <property name="x">58</property>
-            <property name="y">103</property>
+            <property name="x">137</property>
+            <property name="y">139</property>
           </packing>
         </child>
         <child>
@@ -43,37 +44,38 @@
             <signal name="clicked" handler="on_btn_confirmar_clicked" swapped="no"/>
           </object>
           <packing>
-            <property name="x">168</property>
-            <property name="y">103</property>
+            <property name="x">243</property>
+            <property name="y">140</property>
           </packing>
         </child>
         <child>
           <object class="GtkLabel" id="lbl_informe_senha">
-            <property name="width_request">206</property>
+            <property name="width_request">283</property>
             <property name="height_request">44</property>
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes">Autenticação necessária como 
-super usuário, informe a senha:</property>
+            <property name="label" translatable="yes">Autenticação necessária como  super usuário, 
+informe a senha:</property>
           </object>
           <packing>
-            <property name="x">64</property>
-            <property name="y">4</property>
+            <property name="x">71</property>
+            <property name="y">37</property>
           </packing>
         </child>
         <child>
           <object class="GtkEntry" id="entry_senha">
-            <property name="width_request">209</property>
+            <property name="width_request">277</property>
             <property name="height_request">35</property>
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="visibility">False</property>
             <property name="invisible_char">*</property>
             <property name="input_purpose">password</property>
+            <signal name="activate" handler="on_entry_senha_activate" swapped="no"/>
           </object>
           <packing>
-            <property name="x">59</property>
-            <property name="y">53</property>
+            <property name="x">65</property>
+            <property name="y">94</property>
           </packing>
         </child>
         <child>
@@ -85,6 +87,40 @@ super usuário, informe a senha:</property>
             <property name="stock">gtk-dialog-authentication</property>
             <property name="icon_size">6</property>
           </object>
+          <packing>
+            <property name="y">16</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkLabel" id="lbl_title_autentication">
+            <property name="width_request">161</property>
+            <property name="height_request">24</property>
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="label" translatable="yes">Autenticação necessária</property>
+            <attributes>
+              <attribute name="weight" value="bold"/>
+            </attributes>
+          </object>
+          <packing>
+            <property name="x">75</property>
+            <property name="y">17</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkLabel" id="lbl_try_passwd">
+            <property name="width_request">185</property>
+            <property name="height_request">30</property>
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <attributes>
+              <attribute name="foreground" value="#b69c2a4c0d64"/>
+            </attributes>
+          </object>
+          <packing>
+            <property name="x">157</property>
+            <property name="y">64</property>
+          </packing>
         </child>
       </object>
     </child>

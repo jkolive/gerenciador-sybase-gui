@@ -1,24 +1,31 @@
 #!/usr/bin/env python3
-
+import getpass
 import gi
 gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk
 from subprocess import *
+import os
 
 
 class AskPass(Gtk.Window):
-    def __init__(self, passwd=''):
+    def __init__(self):
         Gtk.Window.__init__(self)
 
         # Builder Glade
         builder = Gtk.Builder()
         builder.add_from_file('layout/AskPass.glade')
 
+        # Try passwords
+        self.cont = 0
+
         # Widgets
+        """ Entry """
         self.entry_senha = Gtk.Entry()
         self.entry_senha = builder.get_object('entry_senha')
-
-        self.passwd = passwd
+        """ Label """
+        self.lbl_informe_senha = Gtk.Label()
+        self.lbl_informe_senha = builder.get_object('lbl_informe_senha')
+        self.lbl_try_passwd = builder.get_object('lbl_try_passwd')
 
         # Signals
         builder.connect_signals(self)
@@ -27,11 +34,25 @@ class AskPass(Gtk.Window):
         self.window = builder.get_object('win_askpass')
         self.window.show()
 
-    # Metodos
+    # Methods
     def on_btn_confirmar_clicked(self, *args):
-        self.passwd = self.entry_senha.get_text()
-        run(f'echo {self.passwd} > /tmp/pass', shell=True)
-        Gtk.main_quit(self)
+        os.environ['PASSWD'] = self.entry_senha.get_text()
+        # usermod –aG wheel {getpass.getuser()} # Add user sudores CentOS
+        cmd_pass = run(f'echo {os.environ["PASSWD"]} | sudo -S ./Install.sh > /dev/null 2>&1', shell=True)
+        if cmd_pass.returncode == 0:
+            self.window.hide()
+        if cmd_pass.returncode == 1:
+            self.cont += 1
+            self.lbl_try_passwd.set_text(f'Senha incorreta! 0{self.cont}/03')
+            self.entry_senha.set_text('')
+            if self.cont == 3:
+                Gtk.main_quit()
+        if cmd_pass.returncode == 126:
+            self.lbl_try_passwd.set_text('Usuário sem permissão para execução')
+            self.entry_senha.set_text('')
+
+    def on_entry_senha_activate(self, *args):
+        self.on_btn_confirmar_clicked()
 
     def on_win_askpass_destroy(self, *args):
         Gtk.main_quit(self)
@@ -43,4 +64,3 @@ class AskPass(Gtk.Window):
 if __name__ == '__main__':
     AskPass()
     Gtk.main()
-
