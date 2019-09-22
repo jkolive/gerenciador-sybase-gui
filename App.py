@@ -37,8 +37,8 @@ class Main(Gtk.Window):
         self.rbtn_automatico = builder.get_object('rbtn_automatico')
         self.rbtn_desativado = builder.get_object('rbtn_desativado')
 
-        if os.path.isfile('./data.json'):
-            with open('data.json') as json_file:
+        if os.path.isfile('./.data.json'):
+            with open('.data.json') as json_file:
                 self.data = json.load(json_file)
                 self.txt_nome_servidor.set_text(self.data['banco'][0]['nome_servidor'])
                 self.txt_mem_cache.set_text(self.data['banco'][0]['mem_cache'])
@@ -132,7 +132,7 @@ class Main(Gtk.Window):
 
     def on_btn_excluir_clicked(self, button):
         count = len(self.list_store)
-        if not self.txt_nome_servidor.get_sensitive():
+        if not self.btn_iniciar.get_sensitive():
             dialog = Gtk.MessageDialog(self, 0, Gtk.MessageType.INFO,
                                        Gtk.ButtonsType.OK, 'INFORMAÇÃO')
             dialog.format_secondary_text('Necessário parar o banco de dados!')
@@ -147,7 +147,7 @@ class Main(Gtk.Window):
             pass
         else:
             try:
-                os.remove('data.json')
+                os.remove('.data.json')
 
                 self.txt_nome_servidor.set_text('')
                 self.txt_mem_cache.set_text('')
@@ -191,10 +191,9 @@ class Main(Gtk.Window):
         os.environ['SYBHOME'] = "/opt/sybase/SYBSsa16"
         os.environ['PATH'] = os.environ['PATH'] + ":" + os.environ['SYBHOME'] + "/bin64"
         os.environ['LD_LIBRARY_PATH'] = os.environ['SYBHOME'] + "/lib64"
-        Popen(['export PATH LD_LIBRARY_PATH'], shell=True, executable='/bin/bash')
         cmd = f"dbsrv16 -c {self.txt_mem_cache.get_text()}M -n {self.txt_nome_servidor.get_text()} " \
             f"-ud -o '{caminho}/log/logservidor.txt' '{caminho}/{nome_arquivo}'"
-        process = run([cmd], shell=True)
+        process = run([cmd], shell=True, executable='/bin/bash')
 
         if process.returncode == 0:
             dialog = Gtk.MessageDialog(self, 0, Gtk.MessageType.INFO,
@@ -298,7 +297,7 @@ class Main(Gtk.Window):
             'caminho': self.list_store[self.list_store[0].iter][1],
             'nome_arquivo': self.list_store[self.list_store[0].iter][2]
         })
-        with open('data.json', 'w') as outfile:
+        with open('.data.json', 'w') as outfile:
             json.dump(data, outfile)
 
     def on_btn_fechar_clicked(self, button):

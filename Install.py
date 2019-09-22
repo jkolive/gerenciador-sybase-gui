@@ -51,6 +51,7 @@ class Install(Gtk.Window):
     def on_window_install_focus_in_event(self, widget, event):
         if os.path.isdir('/opt/sybase'):
             self.btn_instalar.set_label('Concluido')
+            self.btn_instalar.set_sensitive(False)
             self.btn_abrir.set_visible(True)
 
     def on_btn_instalar_button_press_event(self, *args):
