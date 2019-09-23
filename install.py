@@ -8,7 +8,7 @@ import gi
 gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk, Gdk
 import App
-from AskPass import AskPass
+import AskPass
 
 
 class Install(Gtk.Window):
@@ -30,7 +30,7 @@ class Install(Gtk.Window):
         App.Main()
 
     def on_btn_instalar_clicked(self, *args):
-        AskPass()
+        AskPass.AskPass()
 
     def on_btn_instalar_enter_notify_event(self, button, event):
         hand1 = Gdk.Cursor(Gdk.CursorType.HAND1)

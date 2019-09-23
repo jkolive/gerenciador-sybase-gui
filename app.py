@@ -13,14 +13,14 @@ from subprocess import *
 import gi
 gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk
-import TryIcon
+import tryIcon
 
 
 class Main(Gtk.Window):
     def __init__(self):
         Gtk.Window.__init__(self)
         builder = Gtk.Builder()
-        builder.add_from_file('layout/App.glade')
+        builder.add_from_file('layout/app.glade')
         self.dialog = builder.get_object('about_dialog')
 
         self.name_file = ''
@@ -311,7 +311,7 @@ class Main(Gtk.Window):
         if response == Gtk.ResponseType.OK:
             # raise SystemExit()
             self.window.hide()
-            TryIcon.TryIcon()
+            tryIcon.TryIcon()
         if response == Gtk.ResponseType.CANCEL:
             pass
         dialog.destroy()
@@ -326,7 +326,7 @@ class Main(Gtk.Window):
 
         if response == Gtk.ResponseType.YES:
             self.window.hide()
-            TryIcon.TryIcon()
+            tryIcon.TryIcon()
 
         return True
 
