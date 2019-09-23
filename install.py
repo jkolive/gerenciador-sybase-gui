@@ -7,15 +7,15 @@ if 'linux' not in sys.platform:
 import gi
 gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk, Gdk
-import App
-import AskPass
+import app
+import askPass
 
 
 class Install(Gtk.Window):
     def __init__(self):
         Gtk.Window.__init__(self)
         builder = Gtk.Builder()
-        builder.add_from_file('layout/Install.glade')
+        builder.add_from_file('layout/install.glade')
         self.progressbar = builder.get_object('pgb_install')
         self.btn_instalar = builder.get_object('btn_instalar')
         self.btn_abrir = builder.get_object('btn_abrir')
@@ -27,10 +27,10 @@ class Install(Gtk.Window):
 
     def on_btn_abrir_clicked(self, *args):
         self.window.hide()
-        App.Main()
+        app.Main()
 
     def on_btn_instalar_clicked(self, *args):
-        AskPass.AskPass()
+        askPass.AskPass()
 
     def on_btn_instalar_enter_notify_event(self, button, event):
         hand1 = Gdk.Cursor(Gdk.CursorType.HAND1)

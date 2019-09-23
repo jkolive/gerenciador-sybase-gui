@@ -2,7 +2,7 @@
 import gi
 gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk
-import App
+import app
 
 
 class TryIcon:
@@ -30,7 +30,7 @@ class TryIcon:
 
     def show_app(self, *args):
         self.statusIcon.set_visible(False)
-        App.Main()
+        app.Main()
 
     def close_app(self, *args):
         Gtk.main_quit()
