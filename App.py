@@ -13,6 +13,7 @@ from subprocess import *
 import gi
 gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk
+import TryIcon
 
 
 class Main(Gtk.Window):
@@ -302,27 +303,30 @@ class Main(Gtk.Window):
 
     def on_btn_fechar_clicked(self, button):
         dialog = Gtk.MessageDialog(self, 0, Gtk.MessageType.INFO,
-                                   Gtk.ButtonsType.OK_CANCEL, "FECHAR APLICATIVO")
-        dialog.format_secondary_text("O sistema ficará executando em segundo plano.")
+                                   Gtk.ButtonsType.OK_CANCEL, "Fechar Aplicativo")
+        dialog.format_secondary_text("O sistema ficará minimizado na área de notificação.")
         dialog.set_position(Gtk.WindowPosition.CENTER_ALWAYS)
         response = dialog.run()
 
         if response == Gtk.ResponseType.OK:
-            raise SystemExit()
+            # raise SystemExit()
+            self.window.hide()
+            TryIcon.TryIcon()
         if response == Gtk.ResponseType.CANCEL:
             pass
         dialog.destroy()
 
     def on_window_main_delete_event(self, *args):
         dialog = Gtk.MessageDialog(self, 0, Gtk.MessageType.QUESTION,
-                                   Gtk.ButtonsType.YES_NO, 'FINALIZAR APLICATIVO')
-        dialog.format_secondary_text("Deseja realmente finalizar o aplicativo?")
+                                   Gtk.ButtonsType.YES_NO, 'Fechar Aplicativo')
+        dialog.format_secondary_text("O sistema ficará minimizado na área de notificação.")
         dialog.set_position(Gtk.WindowPosition.CENTER_ALWAYS)
         response = dialog.run()
         dialog.destroy()
 
         if response == Gtk.ResponseType.YES:
-            Gtk.main_quit()
+            self.window.hide()
+            TryIcon.TryIcon()
 
         return True
 
