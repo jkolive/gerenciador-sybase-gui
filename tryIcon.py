@@ -1,12 +1,16 @@
-""" System Try Icon"""
+#!/usr/bin/env python3
+
 import gi
-gi.require_version('Gtk', '3.0')
-from gi.repository import Gtk
 import app
 
+gi.require_version('Gtk', '3.0')
+from gi.repository import Gtk
+from subprocess import run
 
-class TryIcon:
+
+class TryIcon(Gtk.Window):
     def __init__(self):
+        Gtk.Window.__init__(self)
         self.menu = Gtk.Menu()
         self.statusIcon = Gtk.StatusIcon()
         self.statusIcon.set_from_file('images/tux.png')
@@ -33,6 +37,20 @@ class TryIcon:
         app.Main()
 
     def close_app(self, *args):
+        cmd = run('pidof -s dbsrv16', shell=True)
+        if cmd.returncode == 0:
+            dialog = Gtk.MessageDialog(self, 0, Gtk.MessageType.QUESTION, Gtk.ButtonsType.YES_NO, 'ATENÇÂO!')
+            dialog.format_secondary_text('Banco de Dados ainda em execução! Deseja sair e parar o Banco de dados?')
+            dialog.set_position(Gtk.WindowPosition.CENTER_ALWAYS)
+            response = dialog.run()
+
+            if response == Gtk.ResponseType.YES:
+                run('killall -w -s 15 dbsrv16', shell=True)
+                Gtk.main_quit()
+
+            if response == Gtk.ResponseType.NO:
+                dialog.destroy()
+
         Gtk.main_quit()
 
 

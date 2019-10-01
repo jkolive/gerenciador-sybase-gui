@@ -7,13 +7,12 @@ if 'linux' not in sys.platform:
 import os
 import json
 import time
-import signal
-import subprocess
 from subprocess import *
 import gi
 gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk
 import tryIcon
+import askPass
 
 
 class Main(Gtk.Window):
@@ -67,8 +66,8 @@ class Main(Gtk.Window):
         renderer_toggle = Gtk.CellRendererToggle()
         renderer_toggle.connect("toggled", self.on_cbox_db_toggled)
 
-        column_toggle = Gtk.TreeViewColumn("#", renderer_toggle, active=0)
-        self.treeview.append_column(column_toggle)
+        self.column_toggle = Gtk.TreeViewColumn("#", renderer_toggle, active=0)
+        self.treeview.append_column(self.column_toggle)
 
         renderer_text = Gtk.CellRendererText()
         column_text = Gtk.TreeViewColumn("Caminho", renderer_text, text=1)
@@ -77,12 +76,22 @@ class Main(Gtk.Window):
         renderer_text = Gtk.CellRendererText()
         column_text = Gtk.TreeViewColumn("Nome", renderer_text, text=2)
         self.treeview.append_column(column_text)
+        try:
+            if os.environ['ENTRY_PASS']:
+                pass
+        except KeyError as e:
+            askPass.AskPass()
 
         init_cmd = run('pidof -s dbsrv16', shell=True)
         if init_cmd.returncode == 0:
             self.txt_nome_servidor.set_sensitive(False)
             self.txt_mem_cache.set_sensitive(False)
+            self.txt_param_rede.set_sensitive(False)
+            self.txt_param_servidor.set_sensitive(False)
+            self.rbtn_automatico.set_sensitive(False)
+            self.rbtn_desativado.set_sensitive(False)
             self.btn_gravar.set_sensitive(False)
+            self.treeview.set_sensitive(False)
             self.btn_parar.set_sensitive(True)
             self.btn_iniciar.set_sensitive(False)
 
@@ -187,12 +196,14 @@ class Main(Gtk.Window):
     def cmd_iniciar(self):
         caminho = self.data['banco'][0]['caminho']
         nome_arquivo = self.data['banco'][0]['nome_arquivo']
+        param_redes = self.data['banco'][0]['param_redes']
+        param_servidor = self.data['banco'][0]['param_servidor']
         run([f"mkdir -p '{caminho}'/log"], shell=True)
         run([f"touch '{caminho}/log/logservidor.txt'"], shell=True)
         os.environ['SYBHOME'] = "/opt/sybase/SYBSsa16"
         os.environ['PATH'] = os.environ['PATH'] + ":" + os.environ['SYBHOME'] + "/bin64"
         os.environ['LD_LIBRARY_PATH'] = os.environ['SYBHOME'] + "/lib64"
-        cmd = f"dbsrv16 -c {self.txt_mem_cache.get_text()}M -n {self.txt_nome_servidor.get_text()} " \
+        cmd = f"dbsrv16 {param_redes} {param_servidor} -c {self.txt_mem_cache.get_text()}M -n {self.txt_nome_servidor.get_text()} " \
             f"-ud -o '{caminho}/log/logservidor.txt' '{caminho}/{nome_arquivo}'"
         process = run([cmd], shell=True, executable='/bin/bash')
 
@@ -234,8 +245,8 @@ class Main(Gtk.Window):
         return int(check_output(['pidof', '-s', name]))
 
     def on_btn_parar_clicked(self, buttoon):
-        pid = self.get_pid('dbsrv16')
-        cmd_final = run(f'kill {pid}', shell=True)
+        # pid = self.get_pid('dbsrv16')
+        cmd_final = run('killall -w -s 15 dbsrv16', shell=True)
         time.sleep(3)
         if cmd_final.returncode == 0:
             dialog = Gtk.MessageDialog(self, 0, Gtk.MessageType.INFO,
@@ -250,6 +261,11 @@ class Main(Gtk.Window):
                 self.btn_parar.set_sensitive(False)
                 self.txt_nome_servidor.set_sensitive(True)
                 self.txt_mem_cache.set_sensitive(True)
+                self.txt_param_rede.set_sensitive(True)
+                self.txt_param_servidor.set_sensitive(True)
+                self.rbtn_automatico.set_sensitive(True)
+                self.rbtn_desativado.set_sensitive(True)
+                self.treeview.set_sensitive(True)
                 self.btn_gravar.set_sensitive(True)
             return True
         else:
@@ -266,6 +282,7 @@ class Main(Gtk.Window):
     def on_btn_gravar_clicked(self, button):
         if self.txt_nome_servidor.get_text() == '' \
                 or self.txt_mem_cache.get_text() == '' \
+                or not self.list_store[self.list_store[0].iter][0] \
                 or self.list_store[self.list_store[0].iter][1] == '' \
                 or self.list_store[self.list_store[0].iter][2] == '':
 
@@ -273,18 +290,32 @@ class Main(Gtk.Window):
                                        Gtk.ButtonsType.OK, 'INFORMAÇÃO')
             dialog.format_secondary_text(
                 'Campos necessários ainda não preenchidos!')
+            dialog.set_position(Gtk.WindowPosition.CENTER_ALWAYS)
             dialog.run()
 
             dialog.destroy()
         else:
             self.save_data()
+            run(f'echo {os.environ["ENTRY_PASS"]} | sudo -k -S ./install.sh > /dev/null 2>&1',
+                shell=True)
             self.txt_nome_servidor.set_sensitive(False)
             self.txt_mem_cache.set_sensitive(False)
+            self.txt_param_rede.set_sensitive(False)
+            self.txt_param_servidor.set_sensitive(False)
+            self.rbtn_automatico.set_sensitive(False)
+            self.rbtn_desativado.set_sensitive(False)
+            self.treeview.set_sensitive(False)
             self.btn_gravar.set_sensitive(False)
+            if self.rbtn_desativado.get_active():
+                run(f'echo {os.environ["ENTRY_PASS"]} | sudo -k -S rm /etc/init.d/startDomsis.sh > /dev/null 2>&1',
+                    shell=True)
+            if self.rbtn_automatico.get_active():
+                run('chmod +x ./init.sh', shell=True)
+                run(f'echo {os.environ["ENTRY_PASS"]} | sudo -k -S ./init.sh > /dev/null 2>&1', shell=True)
 
     def save_data(self):
-        data = {'banco': []}
-        data['banco'].append({
+        self.data = {'banco': []}
+        self.data['banco'].append({
             'nome_servidor': self.txt_nome_servidor.get_text(),
             'mem_cache': self.txt_mem_cache.get_text(),
             'param_redes': self.txtbuffer_param_rede.get_text(self.txtbuffer_param_rede.get_start_iter(),
@@ -299,7 +330,7 @@ class Main(Gtk.Window):
             'nome_arquivo': self.list_store[self.list_store[0].iter][2]
         })
         with open('.data.json', 'w') as outfile:
-            json.dump(data, outfile)
+            json.dump(self.data, outfile)
 
     def on_btn_fechar_clicked(self, button):
         dialog = Gtk.MessageDialog(self, 0, Gtk.MessageType.INFO,

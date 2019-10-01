@@ -1,11 +1,10 @@
 #!/usr/bin/env python3
-import getpass
+
 import gi
 gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk
 from subprocess import *
 import os
-import install
 
 
 class AskPass(Gtk.Window):
@@ -37,9 +36,9 @@ class AskPass(Gtk.Window):
 
     # Methods
     def on_btn_confirmar_clicked(self, *args):
-        os.environ['PASSWD'] = self.entry_senha.get_text()
         # usermod –aG wheel {getpass.getuser()} # Add user sudores CentOS
-        cmd_pass = run(f'echo {os.environ["PASSWD"]} | sudo -S ./Install.sh > /dev/null 2>&1', shell=True)
+        os.environ['ENTRY_PASS'] = self.entry_senha.get_text()
+        cmd_pass = run(f'echo {os.environ["ENTRY_PASS"]} | sudo -k -S touch /root/sybase.log > /dev/null 2>&1', shell=True)
         if cmd_pass.returncode == 0:
             self.window.hide()
         if cmd_pass.returncode == 1:
@@ -55,11 +54,11 @@ class AskPass(Gtk.Window):
     def on_entry_senha_activate(self, *args):
         self.on_btn_confirmar_clicked()
 
-    def on_win_askpass_destroy(self, *args):
-        Gtk.main_quit(self)
+    def on_win_askpass_delete_event(self, *args):
+        self.window.hide()
 
     def on_btn_cancelar_clicked(self, *args):
-        Gtk.main_quit(self)
+        Gtk.main_quit()
 
 
 if __name__ == '__main__':
