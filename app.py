@@ -7,21 +7,23 @@ if 'linux' not in sys.platform:
 import os
 import json
 import time
-from subprocess import *
+from subprocess import run, check_output
 import gi
 gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk
 import tryIcon
 import askPass
 
+""" Com a barra no final """
+os.environ['PATH_INSTALL'] = ''
+
 
 class Main(Gtk.Window):
     def __init__(self):
         Gtk.Window.__init__(self)
         builder = Gtk.Builder()
-        builder.add_from_file('layout/app.glade')
+        builder.add_from_file(os.environ['PATH_INSTALL'] + 'layout/app.glade')
         self.dialog = builder.get_object('about_dialog')
-
         self.name_file = ''
         self.name_dir = ''
 
@@ -200,7 +202,7 @@ class Main(Gtk.Window):
         param_servidor = self.data['banco'][0]['param_servidor']
         run([f"mkdir -p '{caminho}'/log"], shell=True)
         run([f"touch '{caminho}/log/logservidor.txt'"], shell=True)
-        os.environ['SYBHOME'] = "/opt/sybase/SYBSsa16"
+        os.environ['SYBHOME'] = os.environ['PATH_INSTALL'] + "sybase/SYBSsa16"
         os.environ['PATH'] = os.environ['PATH'] + ":" + os.environ['SYBHOME'] + "/bin64"
         os.environ['LD_LIBRARY_PATH'] = os.environ['SYBHOME'] + "/lib64"
         cmd = f"dbsrv16 {param_redes} {param_servidor} -c {self.txt_mem_cache.get_text()}M -n {self.txt_nome_servidor.get_text()} " \
@@ -296,8 +298,6 @@ class Main(Gtk.Window):
             dialog.destroy()
         else:
             self.save_data()
-            run(f'echo {os.environ["ENTRY_PASS"]} | sudo -k -S ./install.sh > /dev/null 2>&1',
-                shell=True)
             self.txt_nome_servidor.set_sensitive(False)
             self.txt_mem_cache.set_sensitive(False)
             self.txt_param_rede.set_sensitive(False)
@@ -307,8 +307,8 @@ class Main(Gtk.Window):
             self.treeview.set_sensitive(False)
             self.btn_gravar.set_sensitive(False)
             if self.rbtn_desativado.get_active():
-                run(f'echo {os.environ["ENTRY_PASS"]} | sudo -k -S rm /etc/init.d/startDomsis.sh > /dev/null 2>&1',
-                    shell=True)
+                run(f'echo {os.environ["ENTRY_PASS"]} | sudo -k -S chmod ago-x /etc/init.d/startDomsis.sh > '
+                    f'/dev/null 2>&1', shell=True)
             if self.rbtn_automatico.get_active():
                 run('chmod +x ./init.sh', shell=True)
                 run(f'echo {os.environ["ENTRY_PASS"]} | sudo -k -S ./init.sh > /dev/null 2>&1', shell=True)
