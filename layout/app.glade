@@ -44,18 +44,22 @@ Author: Jackson de Oliveira
     </columns>
   </object>
   <object class="GtkWindow" id="window_main">
+    <property name="width_request">686</property>
+    <property name="height_request">555</property>
+    <property name="visible">True</property>
     <property name="can_focus">False</property>
+    <property name="title" translatable="yes">Gerenciador de Banco de Dados - Sybase</property>
     <property name="resizable">False</property>
     <property name="window_position">center</property>
-    <property name="default_width">687</property>
-    <property name="default_height">555</property>
-    <property name="decorated">False</property>
+    <property name="icon">../images/tux.png</property>
     <signal name="delete-event" handler="on_window_main_delete_event" swapped="no"/>
     <child type="titlebar">
       <placeholder/>
     </child>
     <child>
       <object class="GtkLayout" id="layout_main">
+        <property name="width_request">686</property>
+        <property name="height_request">555</property>
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="width">700</property>
@@ -437,13 +441,12 @@ Author: Jackson de Oliveira
         </child>
         <child>
           <object class="GtkHeaderBar">
-            <property name="width_request">687</property>
+            <property name="width_request">686</property>
             <property name="height_request">43</property>
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="title" translatable="yes">Gerenciador de Banco de Dados</property>
-            <property name="subtitle" translatable="yes">SQLAnywhere - Linux 64bit</property>
-            <property name="show_close_button">True</property>
+            <property name="border_width">0</property>
+            <property name="has_subtitle">False</property>
             <child>
               <object class="GtkMenuBar">
                 <property name="visible">True</property>
@@ -476,6 +479,9 @@ Author: Jackson de Oliveira
               </object>
             </child>
           </object>
+          <packing>
+            <property name="y">-1</property>
+          </packing>
         </child>
         <child>
           <object class="GtkButton" id="btn_excluir">
