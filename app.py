@@ -101,9 +101,16 @@ class Main(Gtk.Window):
         self.window = builder.get_object("window_main")
         self.window.show_all()
 
-    def on_txt_mem_cache_changed(self, button):
-        if self.txt_mem_cache.get_text().isalpha():
-            self.txt_mem_cache.set_text('')
+    def on_txt_mem_cache_key_release_event(self, *args):
+        if not self.txt_mem_cache.get_text().isnumeric():
+            dialog = Gtk.MessageDialog(self, 0, Gtk.MessageType.INFO, Gtk.ButtonsType.OK, 'Atenção')
+            dialog.format_secondary_text('Insira somente números!')
+            dialog.set_position(Gtk.WindowPosition.CENTER)
+            dialog.set_modal(True)
+            response = dialog.run()
+            if response == Gtk.ResponseType.OK:
+                dialog.destroy()
+                self.txt_mem_cache.set_text('')
 
     def on_cbox_db_toggled(self, widget, path):
         self.list_store[path][0] = not self.list_store[path][0]
@@ -193,7 +200,13 @@ class Main(Gtk.Window):
                 self.cmd_iniciar()
 
             except Exception as erro:
-                print(erro)
+                dialog = Gtk.MessageDialog(self, 0, Gtk.MessageType.INFO, Gtk.ButtonsType.OK, 'Atenção')
+                dialog.format_secondary_text('Erro: ', erro)
+                dialog.set_position(Gtk.WindowPosition.CENTER)
+                dialog.set_modal(True)
+                response = dialog.run()
+                if response == Gtk.ResponseType.OK:
+                    dialog.destroy()
 
     def cmd_iniciar(self):
         caminho = self.data['banco'][0]['caminho']

@@ -38,7 +38,8 @@ class AskPass(Gtk.Window):
     def on_btn_confirmar_clicked(self, *args):
         # usermod –aG wheel {getpass.getuser()} # Add user sudores CentOS
         os.environ['ENTRY_PASS'] = self.entry_senha.get_text()
-        cmd_pass = run(f'echo {os.environ["ENTRY_PASS"]} | sudo -k -S touch /root/sybase.log > /dev/null 2>&1', shell=True)
+        cmd_pass = run(f'echo {os.environ["ENTRY_PASS"]} | sudo -k -S touch /root/sybase.log > '
+                       f'/dev/null 2>&1', shell=True)
         if cmd_pass.returncode == 0:
             self.window.hide()
         if cmd_pass.returncode == 1:
