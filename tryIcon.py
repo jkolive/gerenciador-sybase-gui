@@ -14,7 +14,7 @@ class TryIcon(Gtk.Window):
         Gtk.Window.__init__(self)
         self.menu = Gtk.Menu()
         self.statusIcon = Gtk.StatusIcon()
-        self.statusIcon.set_from_file(os.environ['PATH_INSTALL'] + 'images/tux.png')
+        self.statusIcon.set_from_file(os.environ['PATH_INSTALL'] + 'images/app-gerenciador.png')
         self.statusIcon.set_tooltip_text('Gerenciador Sybase')
         self.statusIcon.connect('popup-menu', self.on_right_click)
         # print(dir(self.statusIcon))
