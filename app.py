@@ -101,6 +101,16 @@ class Main(Gtk.Window):
         self.window = builder.get_object("window_main")
         self.window.show_all()
 
+    def on_window_main_activate_default(self, *args):
+        self.txt_nome_servidor.set_sensitive(True)
+        self.txt_mem_cache.set_sensitive(True)
+        self.txt_param_rede.set_sensitive(True)
+        self.txt_param_servidor.set_sensitive(True)
+        self.rbtn_automatico.set_sensitive(True)
+        self.rbtn_desativado.set_sensitive(True)
+        self.treeview.set_sensitive(True)
+        self.btn_gravar.set_sensitive(True)
+
     def on_txt_mem_cache_key_release_event(self, *args):
         if not self.txt_mem_cache.get_text().isnumeric():
             dialog = Gtk.MessageDialog(self, 0, Gtk.MessageType.INFO, Gtk.ButtonsType.OK, 'Atenção')
@@ -325,6 +335,13 @@ class Main(Gtk.Window):
             if self.rbtn_automatico.get_active():
                 run('chmod +x ./init.sh', shell=True)
                 run(f'echo {os.environ["ENTRY_PASS"]} | sudo -k -S ./init.sh > /dev/null 2>&1', shell=True)
+
+        dialog = Gtk.MessageDialog(self, 0, Gtk.MessageType.INFO, Gtk.ButtonsType.OK, 'INFORMAÇÃO')
+        dialog.format_secondary_text('Para alterar novamente, pressione ALT+E')
+        dialog.set_position(Gtk.WindowPosition.CENTER)
+        response = dialog.run()
+        if response == Gtk.ResponseType.OK:
+            dialog.destroy()
 
     def save_data(self):
         self.data = {'banco': []}
