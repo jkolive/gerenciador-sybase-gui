@@ -33,6 +33,11 @@ Author: Jackson de Oliveira
   <!-- interface-description Gerencia banco de dados SQLAnywhere -->
   <!-- interface-copyright 2019 -->
   <!-- interface-authors Jackson de Oliveira -->
+  <object class="GtkImage" id="img_cafe">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="pixbuf">../images/app-cafe.png</property>
+  </object>
   <object class="GtkListStore" id="list_store">
     <columns>
       <!-- column-name # -->
@@ -458,11 +463,20 @@ Author: Jackson de Oliveira
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="label" translatable="yes">Ajuda</property>
-                    <property name="use_underline">True</property>
                     <child type="submenu">
                       <object class="GtkMenu">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <child>
+                          <object class="GtkImageMenuItem" id="doacao">
+                            <property name="label" translatable="yes">Me pague um café</property>
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <property name="image">img_cafe</property>
+                            <property name="use_stock">False</property>
+                            <signal name="activate" handler="on_doacao_activate" swapped="no"/>
+                          </object>
+                        </child>
                         <child>
                           <object class="GtkImageMenuItem" id="about">
                             <property name="label">gtk-about</property>
@@ -551,7 +565,8 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.</property>
     <property name="authors">Jackson de Oliveira
-Twitter: @jkolive</property>
+Twitter: @jkolive
+E-mail: mr.jkolive@gmail.com</property>
     <property name="logo">../images/app-gerenciador.png</property>
     <property name="wrap_license">True</property>
     <property name="license_type">custom</property>

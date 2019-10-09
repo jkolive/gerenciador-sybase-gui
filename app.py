@@ -7,12 +7,13 @@ if 'linux' not in sys.platform:
 import os
 import json
 import time
-from subprocess import run, check_output
+import tryIcon
+import askPass
+import webbrowser
 import gi
 gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk
-import tryIcon
-import askPass
+from subprocess import run, check_output
 
 """ Com a barra no final """
 os.environ['PATH_INSTALL'] = ''
@@ -100,6 +101,11 @@ class Main(Gtk.Window):
         builder.connect_signals(self)
         self.window = builder.get_object("window_main")
         self.window.show_all()
+
+    def on_doacao_activate(self, *args):
+        url = 'https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=A78H4DTAWEJPL&currency_code=' \
+            'BRL&source=url'
+        webbrowser.open(url)
 
     def on_window_main_activate_default(self, *args):
         self.txt_nome_servidor.set_sensitive(True)
