@@ -119,7 +119,8 @@ class Main(Gtk.Window):
 
     def on_txt_mem_cache_key_release_event(self, *args):
         if not self.txt_mem_cache.get_text().isnumeric():
-            dialog = Gtk.MessageDialog(self, 0, Gtk.MessageType.INFO, Gtk.ButtonsType.OK, 'Atenção')
+            dialog = Gtk.MessageDialog(parent=self, flags=0, message_type=Gtk.MessageType.INFO,
+                                       buttons=Gtk.ButtonsType.OK, text='Atenção')
             dialog.format_secondary_text('Insira somente números!')
             dialog.set_position(Gtk.WindowPosition.CENTER)
             dialog.set_modal(True)
@@ -168,8 +169,8 @@ class Main(Gtk.Window):
     def on_btn_excluir_clicked(self, button):
         count = len(self.list_store)
         if not self.btn_iniciar.get_sensitive():
-            dialog = Gtk.MessageDialog(self, 0, Gtk.MessageType.INFO,
-                                       Gtk.ButtonsType.OK, 'INFORMAÇÃO')
+            dialog = Gtk.MessageDialog(parent=self, flags=0, message_type=Gtk.MessageType.INFO,
+                                       buttons=Gtk.ButtonsType.OK, text='INFORMAÇÃO')
             dialog.format_secondary_text('Necessário parar o banco de dados!')
             dialog.set_position(Gtk.WindowPosition.CENTER_ALWAYS)
             response = dialog.run()
@@ -202,8 +203,8 @@ class Main(Gtk.Window):
 
     def on_btn_iniciar_clicked(self, button):
         if self.btn_gravar.get_sensitive():
-            dialog = Gtk.MessageDialog(self, 0, Gtk.MessageType.INFO,
-                                       Gtk.ButtonsType.OK, 'INFORMAÇÃO')
+            dialog = Gtk.MessageDialog(parent=self, flags=0, message_type=Gtk.MessageType.INFO,
+                                       buttons=Gtk.ButtonsType.OK, text='INFORMAÇÃO')
             dialog.format_secondary_text('Necessário gravar as informações antes de inicializar o banco!')
             dialog.set_position(Gtk.WindowPosition.CENTER_ALWAYS)
             response = dialog.run()
@@ -216,7 +217,8 @@ class Main(Gtk.Window):
                 self.cmd_iniciar()
 
             except Exception as erro:
-                dialog = Gtk.MessageDialog(self, 0, Gtk.MessageType.INFO, Gtk.ButtonsType.OK, 'Atenção')
+                dialog = Gtk.MessageDialog(parent=self, flags=0, message_type=Gtk.MessageType.INFO,
+                                           buttons=Gtk.ButtonsType.OK, text='Atenção')
                 dialog.format_secondary_text('Erro: ', erro)
                 dialog.set_position(Gtk.WindowPosition.CENTER)
                 dialog.set_modal(True)
@@ -239,8 +241,8 @@ class Main(Gtk.Window):
         process = run([cmd], shell=True, executable='/bin/bash')
 
         if process.returncode == 0:
-            dialog = Gtk.MessageDialog(self, 0, Gtk.MessageType.INFO,
-                                       Gtk.ButtonsType.OK, 'INFORMAÇÃO')
+            dialog = Gtk.MessageDialog(parent=self, flags=0, message_type=Gtk.MessageType.INFO,
+                                       buttons=Gtk.ButtonsType.OK, text='INFORMAÇÃO')
             dialog.format_secondary_text('Banco de dados inicializado com sucesso!')
             dialog.set_position(Gtk.WindowPosition.CENTER_ALWAYS)
             response = dialog.run()
@@ -251,8 +253,8 @@ class Main(Gtk.Window):
             return True
 
         elif process.returncode == 21:
-            dialog = Gtk.MessageDialog(self, 0, Gtk.MessageType.WARNING,
-                                       Gtk.ButtonsType.OK, 'INFORMAÇÃO')
+            dialog = Gtk.MessageDialog(parent=self, flags=0, message_type=Gtk.MessageType.WARNING,
+                                       buttons=Gtk.ButtonsType.OK, text='INFORMAÇÃO')
             dialog.format_secondary_text('Banco de Dados já inicializado!')
             dialog.set_position(Gtk.WindowPosition.CENTER_ALWAYS)
             response = dialog.run()
@@ -262,8 +264,8 @@ class Main(Gtk.Window):
             return True
 
         else:
-            dialog = Gtk.MessageDialog(self, 0, Gtk.MessageType.WARNING,
-                                       Gtk.ButtonsType.OK, 'ATENÇÃO')
+            dialog = Gtk.MessageDialog(parent=self, flags=0, message_type=Gtk.MessageType.WARNING,
+                                       buttons=Gtk.ButtonsType.OK, text='ATENÇÃO')
             dialog.format_secondary_text('Não foi possível iniciar o Banco de dados!')
             dialog.set_position(Gtk.WindowPosition.CENTER_ALWAYS)
             response = dialog.run()
@@ -280,8 +282,8 @@ class Main(Gtk.Window):
         cmd_final = run('killall -w -s 15 dbsrv16', shell=True)
         time.sleep(3)
         if cmd_final.returncode == 0:
-            dialog = Gtk.MessageDialog(self, 0, Gtk.MessageType.INFO,
-                                       Gtk.ButtonsType.OK, 'INFORMAÇÃO')
+            dialog = Gtk.MessageDialog(parent=self, flags=0, message_type=Gtk.MessageType.INFO,
+                                       buttons=Gtk.ButtonsType.OK, text='INFORMAÇÃO')
             dialog.format_secondary_text('Banco de dados parado com sucesso!')
             dialog.set_position(Gtk.WindowPosition.CENTER_ALWAYS)
             response = dialog.run()
@@ -300,8 +302,8 @@ class Main(Gtk.Window):
                 self.btn_gravar.set_sensitive(True)
             return True
         else:
-            dialog = Gtk.MessageDialog(self, 0, Gtk.MessageType.WARNING,
-                                       Gtk.ButtonsType.OK, 'ATENÇÃO')
+            dialog = Gtk.MessageDialog(parent=self, flags=0, message_type=Gtk.MessageType.WARNING,
+                                       buttons=Gtk.ButtonsType.OK, text='ATENÇÃO')
             dialog.format_secondary_text('Não foi possível parar o banco de dados!')
             dialog.set_position(Gtk.WindowPosition.CENTER_ALWAYS)
             response = dialog.run()
@@ -317,8 +319,8 @@ class Main(Gtk.Window):
                 or self.list_store[self.list_store[0].iter][1] == '' \
                 or self.list_store[self.list_store[0].iter][2] == '':
 
-            dialog = Gtk.MessageDialog(self, 0, Gtk.MessageType.INFO,
-                                       Gtk.ButtonsType.OK, 'INFORMAÇÃO')
+            dialog = Gtk.MessageDialog(parent=self, flags=0, message_type=Gtk.MessageType.INFO,
+                                       buttons=Gtk.ButtonsType.OK, text='INFORMAÇÃO')
             dialog.format_secondary_text(
                 'Campos necessários ainda não preenchidos!')
             dialog.set_position(Gtk.WindowPosition.CENTER_ALWAYS)
@@ -339,10 +341,12 @@ class Main(Gtk.Window):
                 run(f'echo {os.environ["ENTRY_PASS"]} | sudo -k -S chmod ago-x /etc/init.d/startDomsis.sh > '
                     f'/dev/null 2>&1', shell=True)
             if self.rbtn_automatico.get_active():
-                run('chmod +x ./init.sh', shell=True)
-                run(f'echo {os.environ["ENTRY_PASS"]} | sudo -k -S ./init.sh > /dev/null 2>&1', shell=True)
+                run(f'chmod +x {os.environ["PATH_INSTALL"]}init.sh', shell=True)
+                run(f'echo {os.environ["ENTRY_PASS"]} | sudo -k -S {os.environ["PATH_INSTALL"]}init.sh > '
+                    f'/dev/null 2>&1', shell=True)
 
-        dialog = Gtk.MessageDialog(self, 0, Gtk.MessageType.INFO, Gtk.ButtonsType.OK, 'INFORMAÇÃO')
+        dialog = Gtk.MessageDialog(parent=self, flags=0, message_type=Gtk.MessageType.INFO, buttons=Gtk.ButtonsType.OK,
+                                   text='INFORMAÇÃO')
         dialog.format_secondary_text('Para alterar novamente, pressione ALT+E')
         dialog.set_position(Gtk.WindowPosition.CENTER)
         response = dialog.run()
@@ -369,8 +373,8 @@ class Main(Gtk.Window):
             json.dump(self.data, outfile)
 
     def on_btn_fechar_clicked(self, button):
-        dialog = Gtk.MessageDialog(self, 0, Gtk.MessageType.INFO,
-                                   Gtk.ButtonsType.OK_CANCEL, "Fechar Aplicativo")
+        dialog = Gtk.MessageDialog(parent=self, flags=0, message_type=Gtk.MessageType.INFO,
+                                   buttons=Gtk.ButtonsType.OK_CANCEL, text="Fechar Aplicativo")
         dialog.format_secondary_text("O sistema ficará minimizado na área de notificação.")
         dialog.set_position(Gtk.WindowPosition.CENTER_ALWAYS)
         response = dialog.run()
@@ -384,8 +388,8 @@ class Main(Gtk.Window):
         dialog.destroy()
 
     def on_window_main_delete_event(self, *args):
-        dialog = Gtk.MessageDialog(self, 0, Gtk.MessageType.QUESTION,
-                                   Gtk.ButtonsType.YES_NO, 'Fechar Aplicativo')
+        dialog = Gtk.MessageDialog(parent=self, flags=0, message_type=Gtk.MessageType.QUESTION,
+                                   buttons=Gtk.ButtonsType.YES_NO, text='Fechar Aplicativo')
         dialog.format_secondary_text("O sistema ficará minimizado na área de notificação.")
         dialog.set_position(Gtk.WindowPosition.CENTER_ALWAYS)
         response = dialog.run()

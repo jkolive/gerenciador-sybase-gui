@@ -40,7 +40,8 @@ class TryIcon(Gtk.Window):
     def close_app(self, *args):
         cmd = run('pidof -s dbsrv16', shell=True)
         if cmd.returncode == 0:
-            dialog = Gtk.MessageDialog(self, 0, Gtk.MessageType.QUESTION, Gtk.ButtonsType.YES_NO, 'ATENÇÂO!')
+            dialog = Gtk.MessageDialog(parent=self, flags=0, message_type=Gtk.MessageType.QUESTION,
+                                       buttons=Gtk.ButtonsType.YES_NO, text='ATENÇÂO!')
             dialog.format_secondary_text('Banco de Dados ainda em execução! Deseja sair e parar o Banco de dados?')
             dialog.set_position(Gtk.WindowPosition.CENTER_ALWAYS)
             response = dialog.run()
