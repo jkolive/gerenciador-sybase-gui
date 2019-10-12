@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-import app
+import main
 import os
 import sys
 import gi
@@ -35,7 +35,7 @@ class TryIcon(Gtk.Window):
 
     def show_app(self, *args):
         self.statusIcon.set_visible(False)
-        app.Main()
+        main.Main()
 
     def close_app(self, *args):
         cmd = run('pidof -s dbsrv16', shell=True)
@@ -48,12 +48,12 @@ class TryIcon(Gtk.Window):
 
             if response == Gtk.ResponseType.YES:
                 run('killall -w -s 15 dbsrv16', shell=True)
-                Gtk.main_quit()
+                raise SystemExit()
 
             if response == Gtk.ResponseType.NO:
                 dialog.destroy()
 
-        Gtk.main_quit()
+        raise SystemExit()
 
 
 if __name__ == '__main__':

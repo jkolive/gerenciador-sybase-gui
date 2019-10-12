@@ -59,7 +59,7 @@ class AskPass(Gtk.Window):
         self.window.hide()
 
     def on_btn_cancelar_clicked(self, *args):
-        Gtk.main_quit()
+        raise SystemExit()
 
 
 if __name__ == '__main__':
