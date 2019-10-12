@@ -15,15 +15,12 @@ gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk
 from subprocess import run, check_output
 
-""" Com a barra no final """
-os.environ['PATH_INSTALL'] = ''
-
 
 class Main(Gtk.Window):
     def __init__(self):
         Gtk.Window.__init__(self)
         builder = Gtk.Builder()
-        builder.add_from_file(os.environ['PATH_INSTALL'] + 'layout/app.glade')
+        builder.add_from_file(sys.path[0] + '/layout/app.glade')
         self.dialog = builder.get_object('about_dialog')
         self.name_file = ''
         self.name_dir = ''
@@ -233,7 +230,7 @@ class Main(Gtk.Window):
         param_servidor = self.data['banco'][0]['param_servidor']
         run([f"mkdir -p '{caminho}'/log"], shell=True)
         run([f"touch '{caminho}/log/logservidor.txt'"], shell=True)
-        os.environ['SYBHOME'] = os.environ['PATH_INSTALL'] + "sybase/SYBSsa16"
+        os.environ['SYBHOME'] = sys.path[0] + "/sybase/SYBSsa16"
         os.environ['PATH'] = os.environ['PATH'] + ":" + os.environ['SYBHOME'] + "/bin64"
         os.environ['LD_LIBRARY_PATH'] = os.environ['SYBHOME'] + "/lib64"
         cmd = f"dbsrv16 {param_redes} {param_servidor} -c {self.txt_mem_cache.get_text()}M -n {self.txt_nome_servidor.get_text()} " \
@@ -340,9 +337,11 @@ class Main(Gtk.Window):
             if self.rbtn_desativado.get_active():
                 run(f'echo {os.environ["ENTRY_PASS"]} | sudo -k -S chmod ago-x /etc/init.d/startDomsis.sh > '
                     f'/dev/null 2>&1', shell=True)
+                run(f'echo {os.environ["ENTRY_PASS"]} | sudo -k -S rm /etc/xdg/autostart/gerenciador-sybase.desktop > '
+                    f'/dev/null 2>&1', shell=True)
             if self.rbtn_automatico.get_active():
-                run(f'chmod +x {os.environ["PATH_INSTALL"]}init.sh', shell=True)
-                run(f'echo {os.environ["ENTRY_PASS"]} | sudo -k -S {os.environ["PATH_INSTALL"]}init.sh > '
+                run(f'chmod +x {sys.path[0]}/init.sh', shell=True)
+                run(f'echo {os.environ["ENTRY_PASS"]} | sudo -k -S {sys.path[0]}/init.sh > '
                     f'/dev/null 2>&1', shell=True)
 
         dialog = Gtk.MessageDialog(parent=self, flags=0, message_type=Gtk.MessageType.INFO, buttons=Gtk.ButtonsType.OK,

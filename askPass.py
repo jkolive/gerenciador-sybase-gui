@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
-
+import os
+import sys
 import gi
 gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk
 from subprocess import run
-import os
 
 
 class AskPass(Gtk.Window):
@@ -13,7 +13,7 @@ class AskPass(Gtk.Window):
 
         # Builder Glade
         builder = Gtk.Builder()
-        builder.add_from_file(os.environ['PATH_INSTALL'] + 'layout/askPass.glade')
+        builder.add_from_file(sys.path[0] + '/layout/askPass.glade')
 
         # Try passwords
         self.cont = 0
