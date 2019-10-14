@@ -7,7 +7,7 @@ if 'linux' not in sys.platform:
 import os
 import json
 import time
-import tryIcon
+import trayIcon
 import askPass
 import webbrowser
 import gi
@@ -381,7 +381,8 @@ class Main(Gtk.ApplicationWindow):
         if response == Gtk.ResponseType.OK:
             # raise SystemExit()
             self.window.hide()
-            tryIcon.TryIcon()
+            dialog.destroy()
+            trayIcon.TrayIcon()
         if response == Gtk.ResponseType.CANCEL:
             pass
         dialog.destroy()
@@ -396,7 +397,7 @@ class Main(Gtk.ApplicationWindow):
 
         if response == Gtk.ResponseType.YES:
             self.window.hide()
-            tryIcon.TryIcon()
+            trayIcon.TrayIcon()
 
         return True
 

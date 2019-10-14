@@ -47,7 +47,7 @@ class AskPass(Gtk.Window):
             self.lbl_try_passwd.set_text(f'Senha incorreta! 0{self.cont}/03')
             self.entry_senha.set_text('')
             if self.cont == 3:
-                Gtk.main_quit()
+                raise SystemExit()
         if cmd_pass.returncode == 126:
             self.lbl_try_passwd.set_text('Usuário sem permissão para execução')
             self.entry_senha.set_text('')
