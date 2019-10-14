@@ -105,14 +105,23 @@ class Main(Gtk.ApplicationWindow):
         webbrowser.open(url)
 
     def on_window_main_activate_default(self, *args):
-        self.txt_nome_servidor.set_sensitive(True)
-        self.txt_mem_cache.set_sensitive(True)
-        self.txt_param_rede.set_sensitive(True)
-        self.txt_param_servidor.set_sensitive(True)
-        self.rbtn_automatico.set_sensitive(True)
-        self.rbtn_desativado.set_sensitive(True)
-        self.treeview.set_sensitive(True)
-        self.btn_gravar.set_sensitive(True)
+        if not self.btn_iniciar.get_sensitive():
+            dialog = Gtk.MessageDialog(parent=self, flags=0, message_type=Gtk.MessageType.INFO,
+                                       buttons=Gtk.ButtonsType.OK, text='INFORMAÇÃO')
+            dialog.format_secondary_text('Banco em execução! Não é possivel editar')
+            dialog.set_position(Gtk.WindowPosition.CENTER_ALWAYS)
+            response = dialog.run()
+            if response == Gtk.ResponseType.OK:
+                dialog.destroy()
+        else:
+            self.txt_nome_servidor.set_sensitive(True)
+            self.txt_mem_cache.set_sensitive(True)
+            self.txt_param_rede.set_sensitive(True)
+            self.txt_param_servidor.set_sensitive(True)
+            self.rbtn_automatico.set_sensitive(True)
+            self.rbtn_desativado.set_sensitive(True)
+            self.treeview.set_sensitive(True)
+            self.btn_gravar.set_sensitive(True)
 
     def on_txt_mem_cache_key_release_event(self, *args):
         if not self.txt_mem_cache.get_text().isnumeric():
