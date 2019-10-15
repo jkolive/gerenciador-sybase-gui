@@ -64,152 +64,57 @@
       <placeholder/>
     </child>
     <child>
-      <object class="GtkLayout" id="layout_main">
-        <property name="width_request">686</property>
-        <property name="height_request">555</property>
+      <object class="GtkFixed">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="width">700</property>
-        <property name="height">520</property>
         <child>
-          <object class="GtkFrame" id="frm_inicia_parar">
-            <property name="width_request">675</property>
-            <property name="height_request">64</property>
+          <object class="GtkButtonBox" id="btn_box">
+            <property name="width_request">90</property>
+            <property name="height_request">40</property>
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label_xalign">0</property>
+            <property name="margin_left">2</property>
+            <property name="margin_top">2</property>
+            <property name="spacing">5</property>
+            <property name="layout_style">start</property>
             <child>
-              <object class="GtkBox">
+              <object class="GtkMenuButton" id="btn_menu">
+                <property name="width_request">75</property>
+                <property name="height_request">40</property>
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="margin_left">10</property>
-                <property name="margin_top">6</property>
-                <property name="margin_bottom">6</property>
-                <property name="spacing">6</property>
+                <property name="can_focus">True</property>
+                <property name="receives_default">True</property>
+                <property name="popup">menu1</property>
+                <property name="direction">none</property>
                 <child>
-                  <object class="GtkButton" id="btn_iniciar">
-                    <property name="label" translatable="yes">Iniciar</property>
-                    <property name="width_request">65</property>
-                    <property name="height_request">34</property>
-                    <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="receives_default">True</property>
-                    <property name="tooltip_text" translatable="yes">Inicializa o banco da dados selecionado.</property>
-                  </object>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">True</property>
-                    <property name="position">0</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkButton" id="btn_parar">
-                    <property name="label" translatable="yes">Parar</property>
-                    <property name="width_request">65</property>
-                    <property name="height_request">34</property>
-                    <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="receives_default">True</property>
-                    <property name="tooltip_text" translatable="yes">Para o banco da dados selecionado.</property>
-                  </object>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">True</property>
-                    <property name="position">1</property>
-                  </packing>
+                  <placeholder/>
                 </child>
               </object>
-            </child>
-            <child type="label">
-              <object class="GtkLabel" id="lbl_iniciar_parar">
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="label" translatable="yes"> Iniciar / Parar  </property>
-              </object>
+              <packing>
+                <property name="expand">True</property>
+                <property name="fill">True</property>
+                <property name="position">0</property>
+              </packing>
             </child>
           </object>
-          <packing>
-            <property name="x">5</property>
-            <property name="y">442</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkFrame" id="frm_inicializacao">
-            <property name="width_request">675</property>
-            <property name="height_request">86</property>
-            <property name="visible">True</property>
-            <property name="can_focus">False</property>
-            <property name="label_xalign">0</property>
-            <child>
-              <object class="GtkButtonBox">
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="halign">start</property>
-                <property name="margin_left">10</property>
-                <property name="margin_top">3</property>
-                <property name="orientation">vertical</property>
-                <property name="spacing">4</property>
-                <property name="layout_style">start</property>
-                <child>
-                  <object class="GtkRadioButton" id="rbtn_automatico">
-                    <property name="label" translatable="yes">Automático</property>
-                    <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="receives_default">False</property>
-                    <property name="draw_indicator">True</property>
-                    <property name="group">rbtn_desativado</property>
-                  </object>
-                  <packing>
-                    <property name="expand">True</property>
-                    <property name="fill">True</property>
-                    <property name="position">0</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkRadioButton" id="rbtn_desativado">
-                    <property name="label" translatable="yes">Desativado</property>
-                    <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="receives_default">False</property>
-                    <property name="draw_indicator">True</property>
-                    <property name="group">rbtn_automatico</property>
-                  </object>
-                  <packing>
-                    <property name="expand">True</property>
-                    <property name="fill">True</property>
-                    <property name="position">1</property>
-                  </packing>
-                </child>
-              </object>
-            </child>
-            <child type="label">
-              <object class="GtkLabel" id="lbl_inicializacao">
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Inicialização</property>
-              </object>
-            </child>
-          </object>
-          <packing>
-            <property name="x">5</property>
-            <property name="y">237</property>
-          </packing>
         </child>
         <child>
           <object class="GtkFrame" id="frm_parametros">
-            <property name="width_request">563</property>
-            <property name="height_request">175</property>
+            <property name="width_request">552</property>
+            <property name="height_request">183</property>
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="label_xalign">0</property>
             <child>
               <object class="GtkFixed">
                 <property name="width_request">32</property>
-                <property name="height_request">166</property>
+                <property name="height_request">32</property>
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="halign">start</property>
                 <property name="valign">start</property>
+                <property name="margin_right">2</property>
+                <property name="margin_bottom">2</property>
                 <child>
                   <object class="GtkLabel">
                     <property name="width_request">194</property>
@@ -346,7 +251,7 @@
           </object>
           <packing>
             <property name="x">5</property>
-            <property name="y">49</property>
+            <property name="y">45</property>
           </packing>
         </child>
         <child>
@@ -358,14 +263,75 @@
             <property name="pixbuf">../images/app-gerenciador.png</property>
           </object>
           <packing>
-            <property name="x">564</property>
-            <property name="y">77</property>
+            <property name="x">556</property>
+            <property name="y">54</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkFrame" id="frm_inicializacao">
+            <property name="width_request">678</property>
+            <property name="height_request">80</property>
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="label_xalign">0</property>
+            <child>
+              <object class="GtkButtonBox">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="halign">start</property>
+                <property name="margin_top">3</property>
+                <property name="orientation">vertical</property>
+                <property name="spacing">4</property>
+                <property name="layout_style">start</property>
+                <child>
+                  <object class="GtkRadioButton" id="rbtn_automatico">
+                    <property name="label" translatable="yes">Automático</property>
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="receives_default">False</property>
+                    <property name="draw_indicator">True</property>
+                    <property name="group">rbtn_desativado</property>
+                  </object>
+                  <packing>
+                    <property name="expand">True</property>
+                    <property name="fill">True</property>
+                    <property name="position">0</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkRadioButton" id="rbtn_desativado">
+                    <property name="label" translatable="yes">Desativado</property>
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="receives_default">False</property>
+                    <property name="draw_indicator">True</property>
+                    <property name="group">rbtn_automatico</property>
+                  </object>
+                  <packing>
+                    <property name="expand">True</property>
+                    <property name="fill">True</property>
+                    <property name="position">1</property>
+                  </packing>
+                </child>
+              </object>
+            </child>
+            <child type="label">
+              <object class="GtkLabel" id="lbl_inicializacao">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="label" translatable="yes">Inicialização</property>
+              </object>
+            </child>
+          </object>
+          <packing>
+            <property name="x">5</property>
+            <property name="y">234</property>
           </packing>
         </child>
         <child>
           <object class="GtkFrame" id="frm_banco_de_dados">
-            <property name="width_request">675</property>
-            <property name="height_request">110</property>
+            <property name="width_request">678</property>
+            <property name="height_request">107</property>
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="label_xalign">0</property>
@@ -396,43 +362,76 @@
           </object>
           <packing>
             <property name="x">5</property>
-            <property name="y">326</property>
+            <property name="y">319</property>
           </packing>
         </child>
         <child>
-          <object class="GtkButtonBox" id="btn_box">
-            <property name="width_request">85</property>
-            <property name="height_request">40</property>
+          <object class="GtkFrame" id="frm_inicia_parar">
+            <property name="width_request">678</property>
+            <property name="height_request">65</property>
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="margin_left">5</property>
-            <property name="margin_top">5</property>
-            <property name="spacing">5</property>
-            <property name="layout_style">start</property>
+            <property name="label_xalign">0</property>
             <child>
-              <object class="GtkMenuButton" id="btn_menu">
-                <property name="width_request">75</property>
-                <property name="height_request">40</property>
+              <object class="GtkBox">
                 <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="receives_default">True</property>
-                <property name="relief">half</property>
-                <property name="popup">menu1</property>
-                <property name="direction">none</property>
+                <property name="can_focus">False</property>
+                <property name="halign">start</property>
+                <property name="margin_left">3</property>
+                <property name="margin_top">6</property>
+                <property name="margin_bottom">6</property>
+                <property name="spacing">6</property>
                 <child>
-                  <placeholder/>
+                  <object class="GtkButton" id="btn_iniciar">
+                    <property name="label" translatable="yes">Iniciar</property>
+                    <property name="width_request">65</property>
+                    <property name="height_request">34</property>
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="receives_default">True</property>
+                    <property name="tooltip_text" translatable="yes">Inicializa o banco da dados selecionado.</property>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">0</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkButton" id="btn_parar">
+                    <property name="label" translatable="yes">Parar</property>
+                    <property name="width_request">65</property>
+                    <property name="height_request">34</property>
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="receives_default">True</property>
+                    <property name="tooltip_text" translatable="yes">Para o banco da dados selecionado.</property>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">1</property>
+                  </packing>
                 </child>
               </object>
-              <packing>
-                <property name="expand">True</property>
-                <property name="fill">True</property>
-                <property name="position">0</property>
-              </packing>
+            </child>
+            <child type="label">
+              <object class="GtkLabel" id="lbl_iniciar_parar">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="label" translatable="yes"> Iniciar / Parar  </property>
+              </object>
             </child>
           </object>
+          <packing>
+            <property name="x">5</property>
+            <property name="y">431</property>
+          </packing>
         </child>
         <child>
           <object class="GtkBox">
+            <property name="width_request">136</property>
+            <property name="height_request">34</property>
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="spacing">6</property>
@@ -472,12 +471,14 @@
             </child>
           </object>
           <packing>
-            <property name="x">543</property>
-            <property name="y">512</property>
+            <property name="x">517</property>
+            <property name="y">498</property>
           </packing>
         </child>
         <child>
           <object class="GtkBox">
+            <property name="width_request">136</property>
+            <property name="height_request">34</property>
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="spacing">6</property>
@@ -515,8 +516,8 @@
             </child>
           </object>
           <packing>
-            <property name="x">537</property>
-            <property name="y">398</property>
+            <property name="x">517</property>
+            <property name="y">389</property>
           </packing>
         </child>
       </object>
