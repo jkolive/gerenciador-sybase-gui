@@ -61,6 +61,9 @@ class AskPass(Gtk.Window):
     def on_btn_cancelar_clicked(self, *args):
         raise SystemExit()
 
+    def on_win_askpass_destroy(self, *args):
+        raise SystemExit()
+
 
 if __name__ == '__main__':
     AskPass()
