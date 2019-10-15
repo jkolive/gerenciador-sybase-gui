@@ -1,4 +1,4 @@
-SYBHOME="/opt/sybase/SYBSsa16"
+SYBHOME="/opt/gerenciador-sybase-gui/sybase/SYBSsa16"
 PATH="$PATH:$SYBHOME/bin64"
 LD_LIBRARY_PATH="$SYBHOME/lib64"
 export PATH LD_LIBRARY_PATH
