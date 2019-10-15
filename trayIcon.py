@@ -77,7 +77,7 @@ class TrayIcon(Gtk.Window):
         if cmd.returncode == 0:
             dialog = Gtk.MessageDialog(parent=self, flags=0, message_type=Gtk.MessageType.QUESTION,
                                        buttons=Gtk.ButtonsType.YES_NO, text='ATENÇÃO!')
-            dialog.format_secondary_text('Banco de Dados ainda em execução! Deseja sair e parar o Banco de dados?')
+            dialog.format_secondary_text('Banco de Dados ainda em execução! Deseja parar o Banco de dados?')
             dialog.set_position(Gtk.WindowPosition.CENTER_ALWAYS)
             response = dialog.run()
 

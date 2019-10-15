@@ -99,6 +99,15 @@ class Main(Gtk.ApplicationWindow):
         self.window = builder.get_object("window_main")
         self.window.show_all()
 
+    def on_ferramentas_activate(self, *args):
+        builder = Gtk.Builder()
+        builder.add_from_file(sys.path[0] + '/layout/desenv.glade')
+        desenv = builder.get_object('win_desenv')
+        btn_paypal = builder.get_object('btn_paypal')
+        btn_paypal.connect('clicked', self.on_doacao_activate)
+
+        desenv.show_all()
+
     def on_doacao_activate(self, *args):
         url = 'https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=A78H4DTAWEJPL&currency_code=' \
             'BRL&source=url'
