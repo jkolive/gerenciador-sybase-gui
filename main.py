@@ -251,8 +251,8 @@ class Main(Gtk.ApplicationWindow):
         os.environ['SYBHOME'] = sys.path[0] + "/sybase/SYBSsa16"
         os.environ['PATH'] = os.environ['PATH'] + ":" + os.environ['SYBHOME'] + "/bin64"
         os.environ['LD_LIBRARY_PATH'] = os.environ['SYBHOME'] + "/lib64"
-        cmd = f"dbsrv16 {param_redes} {param_servidor} -c {self.txt_mem_cache.get_text()}M -n {self.txt_nome_servidor.get_text()} " \
-            f"-ud -o '{caminho}/log/logservidor.txt' '{caminho}/{nome_arquivo}'"
+        cmd = f"dbsrv16 {param_redes} {param_servidor} -c {self.txt_mem_cache.get_text()}M -n " \
+              f"{self.txt_nome_servidor.get_text()} -ud -o '{caminho}/log/logservidor.txt' '{caminho}/{nome_arquivo}'"
         process = run([cmd], shell=True, executable='/bin/bash')
 
         if process.returncode == 0:
@@ -294,7 +294,7 @@ class Main(Gtk.ApplicationWindow):
 
     def on_btn_parar_clicked(self, buttoon):
         # pid = self.get_pid('dbsrv16')
-        cmd_final = run('killall -w -s 15 dbsrv16', shell=True)
+        cmd_final = run(f"echo {os.environ['ENTRY_PASS']} | sudo -k -S killall -w -s 15 dbsrv16", shell=True)
         time.sleep(3)
         if cmd_final.returncode == 0:
             dialog = Gtk.MessageDialog(parent=self, flags=0, message_type=Gtk.MessageType.INFO,
