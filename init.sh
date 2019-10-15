@@ -28,7 +28,7 @@ if [ $? -eq 0 ]; then
 # Short-Description: Start daemon at boot time
 # Description: Enable service provided by daemon.
 ### END INIT INFO
-source /opt/gerenciador-gui/sybase-sybase/bin64/setenv > /dev/null 2>&1
+source /opt/gerenciador-sybase-gui/sybase/SYBSsa16/bin64/setenv > /dev/null 2>&1
 echo 'Liberando porta 2638 no firewall'
 iptables -D INPUT -p tcp --dport 2638 -j ACCEPT > /dev/null 2>&1
 iptables -I INPUT -p tcp --dport 2638 -j ACCEPT
