@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated with glade 3.22.1 -->
 <interface>
-  <requires lib="gtk+" version="3.20"/>
+  <requires lib="gtk+" version="3.18"/>
   <object class="GtkListStore" id="list_store">
     <columns>
       <!-- column-name # -->
@@ -532,12 +532,12 @@
     <property name="transient_for">window_main</property>
     <property name="program_name">Gerenciador de Banco de Dados - Sybase</property>
     <property name="version">Versão: 1.0.0</property>
-    <property name="copyright" translatable="yes">Copyright (c) 2019 Jackson de Oliveira</property>
+    <property name="copyright" translatable="yes">Copyright (c) 2019 Jackson de Oliveira Silva</property>
     <property name="website">http://www.opensourcesolution.com.br</property>
     <property name="website_label" translatable="yes">Open Source Solution</property>
     <property name="license" translatable="yes">MIT License
 
-Copyright (c) 2019 Jackson de Oliveira
+Copyright (c) 2019 Jackson de Oliveira Silva
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -555,8 +555,12 @@ FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
 AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.</property>
-    <property name="authors">Jackson de Oliveira
+SOFTWARE.
+
+Files: /sybase/*
+
+Copyright (c) Domínio Sistemas</property>
+    <property name="authors">Jackson de Oliveira Silva
 Twitter: @jkolive
 E-mail: mr.jkolive@gmail.com</property>
     <property name="logo">../images/app-gerenciador.png</property>
