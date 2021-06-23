@@ -355,11 +355,13 @@ class Main(Gtk.ApplicationWindow):
             if self.rbtn_desativado.get_active():
                 run(f'echo {os.environ["ENTRY_PASS"]} | sudo -k -S chmod ago-x /etc/init.d/startDomsis.sh > '
                     f'/dev/null 2>&1', shell=True)
-                run(f'echo {os.environ["ENTRY_PASS"]} | sudo -k -S rm /etc/xdg/autostart/gerenciador-sybase.desktop > '
+                run(f'echo {os.environ["ENTRY_PASS"]} | sudo -k -S sed --in-place "s/Exec/#Exec/g" /etc/xdg/autostart/gerenciador-sybase.desktop > '
                     f'/dev/null 2>&1', shell=True)
             if self.rbtn_automatico.get_active():
                 run(f'chmod +x {sys.path[0]}/init.sh', shell=True)
                 run(f'echo {os.environ["ENTRY_PASS"]} | sudo -k -S {sys.path[0]}/init.sh > '
+                    f'/dev/null 2>&1', shell=True)
+                run(f'echo {os.environ["ENTRY_PASS"]} | sudo -k -S sed --in-place "s/#Exec/Exec/g" /etc/xdg/autostart/gerenciador-sybase.desktop > '
                     f'/dev/null 2>&1', shell=True)
 
         dialog = Gtk.MessageDialog(parent=self, flags=0, message_type=Gtk.MessageType.INFO, buttons=Gtk.ButtonsType.OK,
