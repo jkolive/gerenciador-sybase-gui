@@ -21,7 +21,8 @@ class TrayIcon(Gtk.Window):
             self.APPIND = 0
         if self.APPIND == 1:
             timestamp = time()
-            self.indicator = AppIndicator3.Indicator.new(f"_id_{timestamp}", sys.path[0] + '/images/app-gerenciador.png',
+            self.indicator = AppIndicator3.Indicator.new(f"_id_{timestamp}", sys.path[0] +
+                                                         '/images/trayicon/app-gerenciador.png',
                                                          AppIndicator3.IndicatorCategory.APPLICATION_STATUS)
             self.active = AppIndicator3.IndicatorStatus.ACTIVE
             self.passive = AppIndicator3.IndicatorStatus.PASSIVE
@@ -32,7 +33,7 @@ class TrayIcon(Gtk.Window):
 
         else:
             self.statusIcon = Gtk.StatusIcon()
-            self.statusIcon.set_from_file(sys.path[0] + '/images/trayicon/app-gerenciador.png')
+            self.statusIcon.set_from_file(sys.path[0] + '/images/app-gerenciador.png')
             self.statusIcon.set_tooltip_text('Gerenciador Sybase')
             self.statusIcon.connect('popup-menu', self.on_right_click)
 
