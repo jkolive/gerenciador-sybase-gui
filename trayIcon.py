@@ -83,7 +83,7 @@ class TrayIcon(Gtk.Window):
             response = dialog.run()
 
             if response == Gtk.ResponseType.YES:
-                run('killall -w -s 15 dbsrv16', shell=True)
+                run(f'echo {os.environ["ENTRY_PASS"]} | sudo -k -S killall -w -s 15 dbsrv16', shell=True)
                 raise SystemExit()
 
             if response == Gtk.ResponseType.NO:
