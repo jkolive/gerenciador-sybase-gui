@@ -555,13 +555,13 @@
     <property name="type_hint">dialog</property>
     <property name="transient_for">window_main</property>
     <property name="program_name">Gerenciador de Banco de Dados - Sybase</property>
-    <property name="version">Versão: 1.0.0</property>
-    <property name="copyright" translatable="yes">Copyright (c) 2019 Jackson de Oliveira Silva</property>
+    <property name="version">Versão: 1.0.1</property>
+    <property name="copyright" translatable="yes">Copyright (c) 2019-2021 Jackson de Oliveira Silva</property>
     <property name="website">http://www.opensourcesolution.com.br</property>
     <property name="website_label" translatable="yes">Open Source Solution</property>
     <property name="license" translatable="yes">MIT License
 
-Copyright (c) 2019 Jackson de Oliveira Silva
+Copyright (c) 2019-2021 Jackson de Oliveira Silva
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
