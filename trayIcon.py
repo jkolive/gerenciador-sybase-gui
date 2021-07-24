@@ -27,20 +27,18 @@ class TrayIcon(Gtk.Window):
             self.active = AppIndicator3.IndicatorStatus.ACTIVE
             self.passive = AppIndicator3.IndicatorStatus.PASSIVE
             self.indicator.set_status(self.active)
-            self.indicator.set_title('Gerencidor Sybase')
+            self.indicator.set_title('Gerenciador Sybase')
             self.indicator.set_menu(self.add_menu_indicator())
-            Gtk.main()
-
         else:
             self.statusIcon = Gtk.StatusIcon()
-            self.statusIcon.set_from_file(sys.path[0] + '/images/app-gerenciador.png')
+            self.statusIcon.set_from_file(sys.path[0] + '/images/trayicon/app-gerenciador.png')
             self.statusIcon.set_tooltip_text('Gerenciador Sybase')
             self.statusIcon.connect('popup-menu', self.on_right_click)
 
     def add_menu_indicator(self):
         menu = Gtk.Menu()
         miApp = Gtk.MenuItem()
-        miApp.set_label('Abri Gerenciador')
+        miApp.set_label('Abrir Gerenciador')
         miApp.connect('activate', self.show_app)
         menu.append(miApp)
 
@@ -68,9 +66,10 @@ class TrayIcon(Gtk.Window):
         menu.popup(None, None, None, self.statusIcon, button, time_active)
 
     def show_app(self, *args):
-        if self.APPIND == 0:
+        if self.APPIND == 1:
+            self.indicator.set_status(self.passive)
+        else:
             self.statusIcon.set_visible(False)
-        self.indicator.set_status(self.passive)
         main.Main()
 
     def close_app(self, *args):
@@ -90,7 +89,3 @@ class TrayIcon(Gtk.Window):
                 dialog.destroy()
 
         raise SystemExit()
-
-
-if __name__ == '__main__':
-    TryIcon()
