@@ -181,6 +181,9 @@ class Main(Gtk.ApplicationWindow):
     def on_about_dialog_response(self, *args):
         self.dialog.hide()
 
+    def on_update_activate(self, *args):
+        webbrowser.open('https://github.com/jkolive/gerenciador-sybase-gui/releases')
+                  
     def on_btn_excluir_clicked(self, button):
         count = len(self.list_store)
         if not self.btn_iniciar.get_sensitive():

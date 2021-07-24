@@ -40,6 +40,16 @@
       </object>
     </child>
     <child>
+      <object class="GtkMenuItem" id="update">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="tooltip_text" translatable="yes">Atualizações</property>
+        <property name="label" translatable="yes">Verificar Atualizações...</property>
+        <property name="use_underline">True</property>
+        <signal name="activate" handler="on_update_activate" swapped="no"/>
+      </object>
+    </child>
+    <child>
       <object class="GtkMenuItem" id="about">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
