@@ -21,7 +21,21 @@
         <property name="can_focus">False</property>
         <property name="label" translatable="yes">Ferramentas</property>
         <property name="use_underline">True</property>
-        <signal name="activate" handler="on_ferramentas_activate" swapped="no"/>
+        <child type="submenu">
+          <object class="GtkMenu">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <child>
+              <object class="GtkMenuItem" id="dblocate">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="label" translatable="yes">Localizar Servidor</property>
+                <property name="use_underline">True</property>
+                <signal name="activate" handler="on_dblocate_activate" swapped="no"/>
+              </object>
+            </child>
+          </object>
+        </child>
       </object>
     </child>
     <child>

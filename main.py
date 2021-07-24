@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 
+import subprocess
 import sys
 if 'linux' not in sys.platform:
     raise Exception('Somente Linux')
@@ -10,9 +11,10 @@ import time
 import trayIcon
 import askPass
 import webbrowser
+import threading
 import gi
 gi.require_version('Gtk', '3.0')
-from gi.repository import Gtk
+from gi.repository import Gtk, Gdk
 from subprocess import run, check_output
 
 
@@ -99,14 +101,45 @@ class Main(Gtk.ApplicationWindow):
         self.window = builder.get_object("window_main")
         self.window.show_all()
 
-    def on_ferramentas_activate(self, *args):
-        builder = Gtk.Builder()
-        builder.add_from_file(sys.path[0] + '/layout/desenv.glade')
-        desenv = builder.get_object('win_desenv')
-        btn_paypal = builder.get_object('btn_paypal')
-        btn_paypal.connect('clicked', self.on_doacao_activate)
+    def on_btn_locate_enter(self, button):
+        hand = Gdk.Cursor(Gdk.CursorType.HAND1)
+        button.get_window().set_cursor(hand)
 
-        desenv.show_all()
+    def on_btn_locate_leave(self, button):
+        arrow = Gdk.Cursor(Gdk.CursorType.ARROW)
+        button.get_window().set_cursor(arrow)
+
+    def on_dblocate_activate(self, *args):
+        builder = Gtk.Builder()
+        builder.add_from_file(sys.path[0] + '/layout/locate.glade')
+        win_locate = builder.get_object('win_locate')
+        win_locate.set_transient_for(self.window)
+        self.btn_locate = builder.get_object('btn_locate')
+        self.spinner = builder.get_object('spinner')
+        self.view_text = builder.get_object('view_text')
+        self.btn_locate.connect('clicked', self.thread_dblocate)
+        self.btn_locate.connect('enter', self.on_btn_locate_enter)
+        self.btn_locate.connect('leave', self.on_btn_locate_leave)
+
+        win_locate.show_all()
+
+    def thread_dblocate(self, *args):
+        self.spinner.start()
+        th = threading.Thread(target=self.cmd_dblocate)
+        th.start()
+
+    def cmd_dblocate(self):
+        os.environ['SYBHOME'] = sys.path[0] + "/sybase/SYBSsa16"
+        os.environ['PATH'] = os.environ['PATH'] + ":" + os.environ['SYBHOME'] + "/bin64"
+        os.environ['LD_LIBRARY_PATH'] = os.environ['SYBHOME'] + "/lib64"
+        try:
+            txt = Gtk.TextBuffer()
+            result = run('dblocate -d', shell=True, executable='/bin/bash', capture_output=True, text=True)
+            txt.set_text(result.stdout)
+            self.view_text.set_buffer(txt)
+            self.spinner.stop()
+        except subprocess.SubprocessError as e:
+            print(e)
 
     def on_doacao_activate(self, *args):
         url = 'https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=A78H4DTAWEJPL&currency_code=' \
