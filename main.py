@@ -395,7 +395,8 @@ class Main(Gtk.ApplicationWindow):
                 run(f'echo {os.environ["ENTRY_PASS"]} | sudo -k -S sed --in-place "s/Exec/#Exec/g" /etc/xdg/autostart/gerenciador-sybase.desktop > '
                     f'/dev/null 2>&1', shell=True)
             if self.rbtn_automatico.get_active():
-                run(f'chmod +x {sys.path[0]}/init.sh', shell=True)
+                run(f'echo {os.environ["ENTRY_PASS"]} | sudo -k -S chmod +x {sys.path[0]}/init.sh > '
+                    f'/dev/null 2>&1', shell=True)
                 run(f'echo {os.environ["ENTRY_PASS"]} | sudo -k -S {sys.path[0]}/init.sh > '
                     f'/dev/null 2>&1', shell=True)
                 run(f'echo {os.environ["ENTRY_PASS"]} | sudo -k -S sed --in-place "s/#Exec/Exec/g" /etc/xdg/autostart/gerenciador-sybase.desktop > '
