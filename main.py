@@ -181,8 +181,9 @@ class Main(Gtk.ApplicationWindow):
         self.list_store[path][0] = not self.list_store[path][0]
 
     def on_btn_incluir_clicked(self, button):
-        dialog = Gtk.FileChooserDialog("Localize o banco de dados", self, Gtk.FileChooserAction.OPEN,
-                                       (Gtk.STOCK_CANCEL, Gtk.ResponseType.CANCEL, Gtk.STOCK_OPEN, Gtk.ResponseType.OK))
+        dialog = Gtk.FileChooserDialog(title="Localize o banco de dados", parent=self, action=Gtk.FileChooserAction.OPEN)
+
+        dialog.add_buttons(Gtk.STOCK_CANCEL, Gtk.ResponseType.CANCEL, Gtk.STOCK_OPEN, Gtk.ResponseType.OK)
 
         self.add_filters(dialog)
         dialog.set_transient_for(self)
