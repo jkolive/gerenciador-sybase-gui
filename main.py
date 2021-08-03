@@ -331,7 +331,7 @@ class Main(Gtk.ApplicationWindow):
 
     def on_btn_parar_clicked(self, buttoon):
         # pid = self.get_pid('dbsrv16')
-        cmd_final = run(f"echo {os.environ['ENTRY_PASS']} | sudo -k -S killall -w -s 15 dbsrv16", shell=True)
+        cmd_final = run(f"echo {os.environ['ENTRY_PASS']} | sudo -k -S killall -w -s 15 dbsrv16 > /dev/null 2>&1", shell=True)
         time.sleep(3)
         if cmd_final.returncode == 0:
             dialog = Gtk.MessageDialog(parent=self, flags=0, message_type=Gtk.MessageType.INFO,
