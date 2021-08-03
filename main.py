@@ -134,7 +134,7 @@ class Main(Gtk.ApplicationWindow):
         os.environ['LD_LIBRARY_PATH'] = os.environ['SYBHOME'] + "/lib64"
         try:
             txt = Gtk.TextBuffer()
-            result = run('dblocate -d', shell=True, executable='/bin/bash', capture_output=True, text=True)
+            result = run('dblocate -d', shell=True, executable='/bin/bash', stdout=subprocess.PIPE, encoding='utf-8')
             txt.set_text(result.stdout)
             self.view_text.set_buffer(txt)
             self.spinner.stop()
